@@ -91,7 +91,7 @@ const Game = {
 		{ radius: 192, scoreValue: 66, img: './assets/img-planet/circle10.png' },
 	],
 	currentFruitSize: 0,
-	nextFruitSize: 0,
+	nextFruitSize: 0,	
 	setNextFruitSize: function () {
 		Game.nextFruitSize = Math.floor(rand() * 5);
 		Game.elements.nextFruitImg.src = `./assets/img-planet/circle${Game.nextFruitSize}.png`;
@@ -324,7 +324,7 @@ const menuStatics = [
 			isStatic: true,
 			render: {
 				sprite: {
-					texture: `./assets/img/circle${index}.png`,
+					texture: `./assets/img-planet/circle${index}.png`,
 					xScale: r / 1024,
 					yScale: r / 1024,
 				},
