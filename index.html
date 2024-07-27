@@ -10,6 +10,11 @@
     /* @import url(https://fonts.bunny.net/css?family=azeret-mono:400,700,900); */
 
     @import url('https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap');
+    @font-face {
+      font-family: 'Nico Moji';
+      src: url('./assets/fonts/NicoMoji-Regular.woff2') format('woff2'),
+          url('./assets/fonts/NicoMoji-Regular.woff') format('woff');
+    }
 
 
 
@@ -60,15 +65,17 @@
     }
 
     #game-score {
-      position: absolute;
-      width: 100%;
-      border-bottom: 2px dotted #333;
-      font-size: 84px;
-      font-weight: 900;
-      padding-left: 16px;
-      color: var(--col-bg-lighter);
-      text-shadow: 3px 3px 0 var(--col-primary), -3px -3px 0 var(--col-primary), -3px 3px 0 var(--col-primary), 3px -3px 0 var(--col-primary);
-    }
+  position: absolute;
+  width: 100%;
+  border-bottom: 2px dotted #333;
+  font-size: 84px;
+  font-weight: 900;
+  padding-left: 16px;
+  font-family: 'Nico Moji', sans-serif; /* 폰트 적용 */
+  color: var(--col-bg-lighter);
+  text-shadow: 3px 3px 0 var(--col-primary), -3px -3px 0 var(--col-primary), -3px 3px 0 var(--col-primary), 3px -3px 0 var(--col-primary);
+}
+
 
     #game-end-container {
       position: absolute;
@@ -155,7 +162,8 @@
   <div class="container">
     <div id="game-canvas">
       <div id="game-ui">
-        <p id="game-score"></p>
+        <p id="game-score" style="font-family: 'Nico Moji', sans-serif;"></p>
+
 
         <div id="game-end-container">
           <div id="game-end">
