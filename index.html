@@ -24,9 +24,9 @@
 
 
     :root {
-      --col-bg: #FFD59D;
-      --col-bg-light: #FFDCAE;
-      --col-bg-lighter: #FFEEDB;
+      --col-bg: #181818;
+      --col-bg-light: #202020;
+      --col-bg-lighter: #ffffff;
       --col-primary: #FF5300;
       --col-primary-dark: #FF2700;
       --col-primary-light: #FF8800;
@@ -70,16 +70,16 @@
     }
 
     #game-score {
-  position: absolute;
-  width: 100%;
-  border-bottom: 2px dotted #333;
-  font-size: 84px;
-  font-weight: 900;
-  padding-left: 16px;
-  font-family: 'Nico Moji', sans-serif; /* 폰트 적용 */
-  color: var(--col-bg-lighter);
-  /* text-shadow: 3px 3px 0 var(--col-primary), -3px -3px 0 var(--col-primary), -3px 3px 0 var(--col-primary), 3px -3px 0 var(--col-primary); */
-}
+      position: absolute;
+      width: 100%;
+      border-bottom: 2px dotted #333;
+      font-size: 84px;
+      font-weight: 900;
+      padding-left: 16px;
+      font-family: 'Nico Moji', sans-serif; /* 폰트 적용 */
+      color: var(--col-white);
+      /* text-shadow: 3px 3px 0 var(--col-primary), -3px -3px 0 var(--col-primary), -3px 3px 0 var(--col-primary), 3px -3px 0 var(--col-primary); */
+    }
 
 
     #game-end-container {
@@ -135,14 +135,16 @@
       height: 48px;
       background-color: var(--col-bg-lighter);
       display: flex;
+      justify-content: space-between; /* 양쪽 끝으로 배치 */
+      padding: 0 32px; /* 좌우에 약간의 여백 추가 */
     }
 
     .game-status-item {
       display: flex;
       line-height: 1;
       align-items: center;
-      margin-right: 32px;
     }
+
 
     .game-status-label {
       color: #666;
@@ -161,10 +163,139 @@
       width: 24px;
       height: 24px;
     }
-  </style>
+
+    /* 배경 별 */
+    /* Variables */
+    :root {
+      --starFieldWidth: 2560;
+      --starFieldHeight: 2560;
+      --starStartOffset: 600px;
+
+      --starOneScrollDuration: 100s;
+      --starTwoScrollDuration: 125s;
+      --starThreeScrollDuration: 175s;
+      --numStarOneStars: 1700;
+      --numStarTwoStars: 700;
+      --numStarThreeStars: 200;
+      --numShootingStars: 10;
+    }
+
+    /* Background container */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+      overflow: hidden; /* Ensure stars don't overflow */
+    }
+
+    /* Star field layers */
+    .stars, .stars1, .stars2, .shooting-stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes animStar {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2560px) translateX(-2560px);
+      }
+    }
+
+    @keyframes animShootingStar {
+      from {
+        transform: translateY(0px) translateX(0px) rotate(-45deg);
+        opacity: 1;
+        height: 5px;
+      }
+      to {
+        transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
+        opacity: 1;
+        height: 800px;
+      }
+    }
+
+    .stars {
+      z-index: 10;
+      width: 1px;
+      height: 1px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
+      animation: animStar var(--starOneScrollDuration) linear infinite;
+    }
+
+    .stars1 {
+      z-index: 10;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
+      animation: animStar var(--starTwoScrollDuration) linear infinite;
+    }
+
+    .stars2 {
+      z-index: 10;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
+      animation: animStar var(--starThreeScrollDuration) linear infinite;
+    }
+
+    .shooting-stars {
+      z-index: 10;
+      width: 5px;
+      height: 10px;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+      animation: animShootingStar 10s linear infinite;
+    }
+
+</style>
+<script>
+  function createStars(className, numStars) {
+    let stars = '';
+    for (let i = 0; i < numStars; i++) {
+      const x = Math.random() * 2560;
+      const y = Math.random() * 2560;
+      stars += `${x}px ${y}px #FFF, `;
+    }
+    stars = stars.slice(0, -2); // Remove the trailing comma and space
+    document.querySelector(className).style.boxShadow = stars;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    createStars('.stars', 1700);
+    createStars('.stars1', 700);
+    createStars('.stars2', 200);
+  });
+</script>
 </head>
 <body>
+  <div class="background">
+    <div class="stars"></div>
+    <div class="stars1"></div>
+    <div class="stars2"></div>
+    <div class="shooting-stars"></div>
+  </div>
+  
   <div class="container">
+      
     <div id="game-canvas">
       <div id="game-ui">
         <p id="game-score" style="font-family: 'Nico Moji', sans-serif;"></p>
