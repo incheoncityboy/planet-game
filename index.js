@@ -304,9 +304,10 @@ const render = Render.create({
 		width: Game.width,
 		height: Game.height,
 		wireframes: false,
-		background: '#ffdcae'
+		background: './assets/img-planet/bg_space.png'
 	}
 });
+// #C7AEDA 보라색 배경
 
 const menuStatics = [
 	Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
