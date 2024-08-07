@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap">
+    <style>
+        @font-face {
+            font-family: 'Nico Moji';
+            font-style: normal;
+            font-weight: 400;
+            src: url(//fonts.gstatic.com/ea/nicomoji/v1/NicoMoji-Regular.eot);
+            src: url(//fonts.gstatic.com/ea/nicomoji/v1/NicoMoji-Regular.eot?#iefix) format('embedded-opentype'),
+                url(//fonts.gstatic.com/ea/nicomoji/v1/NicoMoji-Regular.woff2) format('woff2'),
+                url(//fonts.gstatic.com/ea/nicomoji/v1/NicoMoji-Regular.woff) format('woff'),
+                url(//fonts.gstatic.com/ea/nicomoji/v1/NicoMoji-Regular.ttf) format('truetype');
+        }
+        body {
+            margin: 0;
+            color: #6a6f8c;
+            background: #c8c8c8;
+            font: 600 16px/18px 'Nico Moji', sans-serif;
+        }
+
+        *, :after, :before { box-sizing: border-box }
+
+        .clearfix:after, .clearfix:before { content: ''; display: table }
+
+        .clearfix:after { clear: both; display: block }
+
+        a { color: inherit; text-decoration: none }
+
+        .login-wrap {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 640px;
+            min-height: 670px;
+            position: relative;
+            
+            /* background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center; */
+            box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
+            
+        }
+
+        .login-html {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            padding: 90px 70px 50px 70px;
+            background: rgba(3, 2, 5, 0.9);
+        }
+
+        .login-html .sign-in-htm,
+        .login-html .sign-up-htm {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            position: absolute;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            transition: all .4s linear;
+        }
+
+        .login-html .sign-in,
+        .login-html .sign-up,
+        .login-form .group .check {
+            display: none;
+        }
+
+        .login-html .tab,
+        .login-form .group .label,
+        .login-form .group .button {
+            text-transform: uppercase;
+        }
+
+        .login-html .tab {
+            font-size: 22px;
+            margin-right: 15px;
+            padding-bottom: 5px;
+            margin: 0 15px 10px 0;
+            display: inline-block;
+            border-bottom: 2px solid transparent;
+        }
+
+        .login-html .sign-in:checked + .tab,
+        .login-html .sign-up:checked + .tab {
+            color: #fff;
+            border-color: #dfee11;
+        }
+
+        .login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm {
+            transform: rotate(0);
+        }
+
+        .login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+            transform: rotate(0);
+        }
+
+        .login-form {
+            min-height: 345px;
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .login-form .group {
+            margin-bottom: 15px;
+        }
+
+        .login-form .group .label,
+        .login-form .group .input,
+        .login-form .group .button {
+            width: 100%;
+            color: #fff;
+            display: block;
+        }
+
+        .login-form .group .input,
+        .login-form .group .button {
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .login-form .group input[data-type="password"] {
+            text-security: circle;
+            -webkit-text-security: circle;
+        }
+
+        .login-form .group .label {
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .login-form .group .button {
+            background: #9fa72f;
+        }
+
+        .login-form .group label .icon {
+            width: 15px;
+            height: 15px;
+            border-radius: 2px;
+            position: relative;
+            display: inline-block;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        .login-form .group label .icon:before,
+        .login-form .group label .icon:after {
+            content: '';
+            width: 10px;
+            height: 2px;
+            background: #fff;
+            position: absolute;
+            transition: all .2s ease-in-out 0s;
+        }
+
+        .login-form .group label .icon:before {
+            left: 3px;
+            width: 5px;
+            bottom: 6px;
+            transform: scale(0) rotate(0);
+        }
+
+        .login-form .group label .icon:after {
+            top: 6px;
+            right: 0;
+            transform: scale(0) rotate(0);
+        }
+
+        .login-form .group .check:checked + label {
+            color: #fff;
+        }
+
+        .login-form .group .check:checked + label .icon {
+            background: #1161ee;
+        }
+
+        .login-form .group .check:checked + label .icon:before {
+            transform: scale(1) rotate(45deg);
+        }
+
+        .login-form .group .check:checked + label .icon:after {
+            transform: scale(1) rotate(-45deg);
+        }
+        
+        /* 배경 별 */
+        :root {
+          --starFieldWidth: 2560;
+          --starFieldHeight: 2560;
+          --starStartOffset: 600px;
+
+          --starOneScrollDuration: 100s;
+          --starTwoScrollDuration: 125s;
+          --starThreeScrollDuration: 175s;
+          --numStarOneStars: 1700;
+          --numStarTwoStars: 700;
+          --numStarThreeStars: 200;
+          --numShootingStars: 10;
+        }
+
+        .background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+          background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+          overflow: hidden;
+        }
+
+        .stars, .stars1, .stars2, .shooting-stars {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        @keyframes animStar {
+          from {
+            transform: translateY(0px);
+          }
+          to {
+            transform: translateY(-2560px) translateX(-2560px);
+          }
+        }
+
+        @keyframes animShootingStar {
+          from {
+            transform: translateY(0px) translateX(0px) rotate(-45deg);
+            opacity: 1;
+            height: 5px;
+          }
+          to {
+            transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
+            opacity: 1;
+            height: 800px;
+          }
+        }
+
+        .stars {
+          z-index: 10;
+          width: 1px;
+          height: 1px;
+          border-radius: 50%;
+          background: transparent;
+          box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
+          animation: animStar var(--starOneScrollDuration) linear infinite;
+        }
+
+        .stars1 {
+          z-index: 10;
+          width: 2px;
+          height: 2px;
+          border-radius: 50%;
+          background: transparent;
+          box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
+          animation: animStar var(--starTwoScrollDuration) linear infinite;
+        }
+
+        .stars2 {
+          z-index: 10;
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background: transparent;
+          box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
+          animation: animStar var(--starThreeScrollDuration) linear infinite;
+        }
+
+        .shooting-stars {
+          z-index: 10;
+          width: 5px;
+          height: 10px;
+          border-top-left-radius: 50%;
+          border-top-right-radius: 50%;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+          animation: animShootingStar 10s linear infinite;
+        }
+
+    </style>
+    <script>
+        function createStars(className, numStars) {
+          let stars = '';
+          for (let i = 0; i < numStars; i++) {
+            const x = Math.random() * 2560;
+            const y = Math.random() * 2560;
+            stars += `${x}px ${y}px #FFF, `;
+          }
+          stars = stars.slice(0, -2); // Remove the trailing comma and space
+          document.querySelector(className).style.boxShadow = stars;
+        }
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          createStars('.stars', 1700);
+          createStars('.stars1', 700);
+          createStars('.stars2', 200);
+        });
+
+        async function registerUser(event) {
+            event.preventDefault();
+            const username = document.getElementById('reg-user').value;
+            const password = document.getElementById('reg-pass').value;
+            const repeatPassword = document.getElementById('repeat-pass').value;
+
+            if (password !== repeatPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Registration successful!');
+            } else {
+                alert(`Registration failed: ${data.message}`);
+            }
+        }
+
+        async function loginUser(event) {
+            event.preventDefault();
+            const username = document.getElementById('login-user').value;
+            const password = document.getElementById('login-pass').value;
+
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Login successful!');
+            } else {
+                alert(`Login failed: ${data.message}`);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="background">
+        <div class="stars"></div>
+        <div class="stars1"></div>
+        <div class="stars2"></div>
+        <div class="shooting-stars"></div>
+    </div>
+    <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+            <label for="tab-1" class="tab">Sign In</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up">
+            <label for="tab-2" class="tab">Sign Up</label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <div class="group">
+                        <label for="login-user" class="label">Username</label>
+                        <input id="login-user" type="text" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="login-pass" class="label">Password</label>
+                        <input id="login-pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <input id="check" type="checkbox" class="check" checked>
+                        <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value="Sign In" onclick="loginUser(event)">
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <a href="#forgot">Forgot Password?</a>
+                    </div>
+                </div>
+                <div class="sign-up-htm">
+                    <div class="group">
+                        <label for="reg-user" class="label">Username</label>
+                        <input id="reg-user" type="text" class="input">
+                    </div>
+                    <div class="group">
+                        <label for="reg-pass" class="label">Password</label>
+                        <input id="reg-pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <label for="repeat-pass" class="label">Repeat Password</label>
+                        <input id="repeat-pass" type="password" class="input" data-type="password">
+                    </div>
+                    <div class="group">
+                        <input type="submit" class="button" value="Sign Up" onclick="registerUser(event)">
+                    </div>
+                    <div class="hr"></div>
+                    <div class="foot-lnk">
+                        <label for="tab-1">Already Member?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
