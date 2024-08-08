@@ -53,14 +53,14 @@ def ranklist(username):
                 break
 
     # 최상위 100명 리스트 변환
-    top_100_list = [{"username": row['username'], "score": row['score'], "user_rank": idx + 1, "timestamp": row['timestamp']} for idx, row in enumerate(top_100)]
+    top_100_list = [{"username": row['username'], "score": row['score'], "user_rank": idx + 1} for idx, row in enumerate(top_100)]
 
     # 주변 100명 리스트 변환
-    surrounding_100_list = [{"username": row['username'], "score": row['score'], "user_rank": start_index + idx + 1, "timestamp": row['timestamp']} for idx, row in enumerate(surrounding_100)]
+    surrounding_100_list = [{"username": row['username'], "score": row['score'], "user_rank": start_index + idx + 1} for idx, row in enumerate(surrounding_100)]
 
-    # 콘솔에 리스트의 첫 5개 항목 출력
-    print("Top 100 List (first 5 items):", top_100_list[:5])
-    print("Surrounding 100 List (first 5 items):", surrounding_100_list[:5])
+    # # 콘솔에 리스트의 첫 5개 항목 출력
+    # print("Top 100 List (first 5 items):", top_100_list[:5])
+    # print("Surrounding 100 List (first 5 items):", surrounding_100_list[:5])
 
     return {
         "top_100": top_100_list,
