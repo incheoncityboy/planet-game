@@ -14,7 +14,11 @@ app = Flask(__name__)
 secret_key = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 app.config['SECRET_KEY'] = secret_key
 
-DATABASE = 'planet-game.db'
+
+
+# 현재 파일(__file__)이 위치한 디렉토리 경로를 기준으로 데이터베이스 파일 경로를 설정합니다.
+DATABASE = os.path.join(os.path.dirname(__file__), 'planet-game.db')
+
 
 def get_db():
     conn = sqlite3.connect(DATABASE)

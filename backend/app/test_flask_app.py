@@ -1,6 +1,7 @@
 import unittest
 import json
-from backend.app.app import app, init_db
+from app import app, init_db
+
 class FlaskTestCase(unittest.TestCase):
 
     def setUp(self):

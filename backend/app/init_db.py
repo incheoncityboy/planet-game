@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 
 # 절대 경로를 사용하여 데이터베이스 파일 위치 지정
-DATABASE = os.path.join('D:\\', 'portfolio', 'planet-game', 'backend', 'app', 'planet-game.db')
+DATABASE = os.path.join(os.path.dirname(__file__), 'planet-game.db')
 
 def init_db():
     conn = sqlite3.connect(DATABASE)
