@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랭킹 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #outerContainer {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* 화면 중앙에 배치 */
+    background-color: var(--col-bg); /* 배경색 추가 */
+}
+
+#leaderboardContainer {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    height: 80%; /* 새로 7개 정도 보이도록 조절 */
+    margin-bottom: 20px; /* 버튼과의 간격 */
+}
+
+        #leaderboard {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #leaderboard li {
+            padding: 35px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #leaderboard li.highlight {
+            background-color: #f0f8ff;
+            font-weight: bold;
+        }
+
+        #leaderboard li:last-child {
+            border-bottom: none;
+        }
+
+
+
+
+.rank {
+    font-weight: bold;
+    font-size: 30px; /* 등수를 크게 표시 */
+    color: #333; /* 등수 색상 */
+    flex-basis: 50px; /* 등수의 너비를 고정 */
+    text-align: left;
+}
+
+.username {
+    flex-grow: 1; /* 이름이 가변적으로 공간을 차지 */
+    font-size: 30px;
+    margin-left: 20px; /* 왼쪽 여백 증가 */
+    margin-right: 10px; /* 오른쪽 여백 */
+}
+
+.score {
+    font-weight: bold;
+    font-size: 30px; /* 점수를 크게 표시 */
+    color: #333; /* 점수 색상 */
+    flex-basis: 100px; /* 점수의 너비를 고정 */
+    text-align: right;
+}
+
+#startGameButton {
+    background-color: #fff346;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 20vw; /* 화면 너비의 20% */
+    height: 10vh; /* 화면 높이의 10% */
+    padding: 1em 2em; /* 텍스트 크기에 비례한 여백 */
+    font-size: 2vw; /* 글꼴 크기 조정 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 32px var(--col-shadow);
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 텍스트가 넘칠 경우 숨김 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 표시 */
+    box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
+}
+
+#startGameButton:hover {
+    background-color: #9cb34a;
+}
+
+
+/* 배경 별 */
+    /* Variables */
+    :root {
+      --starFieldWidth: 2560;
+      --starFieldHeight: 2560;
+      --starStartOffset: 600px;
+
+      --starOneScrollDuration: 100s;
+      --starTwoScrollDuration: 125s;
+      --starThreeScrollDuration: 175s;
+      --numStarOneStars: 1700;
+      --numStarTwoStars: 700;
+      --numStarThreeStars: 200;
+      --numShootingStars: 10;
+    }
+
+    /* Background container */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+      overflow: hidden; /* Ensure stars don't overflow */
+    }
+
+    /* Star field layers */
+    .stars, .stars1, .stars2, .shooting-stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    @keyframes animStar {
+      from {
+        transform: translateY(0px);
+      }
+      to {
+        transform: translateY(-2560px) translateX(-2560px);
+      }
+    }
+
+    @keyframes animShootingStar {
+      from {
+        transform: translateY(0px) translateX(0px) rotate(-45deg);
+        opacity: 1;
+        height: 5px;
+      }
+      to {
+        transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
+        opacity: 1;
+        height: 800px;
+      }
+    }
+
+    .stars {
+      z-index: 10;
+      width: 1px;
+      height: 1px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
+      animation: animStar var(--starOneScrollDuration) linear infinite;
+    }
+
+    .stars1 {
+      z-index: 10;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
+      animation: animStar var(--starTwoScrollDuration) linear infinite;
+    }
+
+    .stars2 {
+      z-index: 10;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
+      animation: animStar var(--starThreeScrollDuration) linear infinite;
+    }
+
+    .shooting-stars {
+      z-index: 10;
+      width: 5px;
+      height: 10px;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+      animation: animShootingStar 10s linear infinite;
+    }
+    </style>
+    <script>
+        function createStars(className, numStars) {
+          let stars = '';
+          for (let i = 0; i < numStars; i++) {
+            const x = Math.random() * 2560;
+            const y = Math.random() * 2560;
+            stars += `${x}px ${y}px #FFF, `;
+          }
+          stars = stars.slice(0, -2); // Remove the trailing comma and space
+          document.querySelector(className).style.boxShadow = stars;
+        }
+      
+        document.addEventListener("DOMContentLoaded", () => {
+          createStars('.stars', 1700);
+          createStars('.stars1', 700);
+          createStars('.stars2', 200);
+        });
+      </script>
+</head>
+<body>
+    <div class="background">
+        <div class="stars"></div>
+        <div class="stars1"></div>
+        <div class="stars2"></div>
+        <div class="shooting-stars"></div>
+      </div>
+
+    <div id="outerContainer">
+        <div id="leaderboardContainer">
+            <ul id="leaderboard">
+                <!-- 순위 리스트가 여기 추가됩니다 -->
+            </ul>
+        </div>
+        <button id="startGameButton">START GAME!</button>
+    </div>
+
+    <script>
+        // JSON 데이터 파일을 로드하는 함수
+        function loadJSONData(file, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.overrideMimeType("application/json");
+            xhr.open('GET', file, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(JSON.parse(xhr.responseText));
+                }
+            };
+            xhr.send(null);
+        }
+
+        function loadRankings(data) {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+
+            // 상위 100 리스트 추가
+            data.top_100.forEach(rank => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span class="rank">${rank.user_rank}</span>
+                    <span class="username">${rank.username}</span>
+                    <span class="score">${rank.score}</span>
+                `;
+                leaderboard.appendChild(listItem);
+            });
+
+            // 서라운딩 100 리스트 추가
+            data.surrounding_100.forEach(rank => {
+                const listItem = document.createElement('li');
+                listItem.className = rank.username === "current_user" ? 'highlight' : '';
+                listItem.innerHTML = `
+                    <span class="rank">${rank.user_rank}</span>
+                    <span class="username">${rank.username}</span>
+                    <span class="score">${rank.score}</span>
+                `;
+                leaderboard.appendChild(listItem);
+            });
+
+            // 사용자 랭크가 화면 가운데에 위치하도록 스크롤
+            setTimeout(() => {
+                const highlighted = document.querySelector('li.highlight');
+                if (highlighted) {
+                    highlighted.scrollIntoView({block: "center", behavior: "smooth"});
+                }
+            }, 100);
+        }
+
+        // JSON 데이터 파일을 로드하고, 로드 완료 시 랭킹 리스트를 표시
+        loadJSONData('rankings.json', loadRankings);
+    </script>
+</body>
+</html>
