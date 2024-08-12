@@ -88,25 +88,22 @@
 
 #startGameButton {
     background-color: #fff346;
-    color: white;
+    color: #000; /* 텍스트 색상을 검은색으로 설정 */
     border: none;
     border-radius: 5px;
-    width: 20vw; /* 화면 너비의 20% */
-    height: 10vh; /* 화면 높이의 10% */
-    padding: 1em 2em; /* 텍스트 크기에 비례한 여백 */
-    font-size: 2vw; /* 글꼴 크기 조정 */
+    padding: 10px 15px; /* 적절한 여백 설정 */
+    font-size: 20px; /* 고정된 글꼴 크기 */
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 32px var(--col-shadow);
-    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
-    overflow: hidden; /* 텍스트가 넘칠 경우 숨김 */
-    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 표시 */
     box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
+    text-align: center; /* 텍스트를 중앙에 위치 */
+    width: 100%; /* 버튼 너비를 100%로 설정 */
+    max-width: 200px; /* 최대 너비를 설정 */
 }
 
 #startGameButton:hover {
-    background-color: #9cb34a;
+    background-color: #94936a; /* 조금 어두운 색으로 변경 */
 }
+
 
 
 /* 배경 별 */
