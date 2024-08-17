@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>planet-game / Watermelon Game Clone</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap">
-  <meta property="og:title" content="planet-game / Watermelon Game Clone" />
-  <!-- <meta property="og:image" content="https://tombofry.github.io/suika-game/screenshot.png" /> -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>planet-game / Watermelon Game Clone</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap">
+    <meta property="og:title" content="planet-game / Watermelon Game Clone" />
+    <!-- <meta property="og:image" content="https://tombofry.github.io/suika-game/screenshot.png" /> -->
+    <script type="text/javascript" src="/static/js/matter.js"></script>
+    <script type="text/javascript" src="/static/js/index.js"></script>
+
   <style>
       /* @import url(https://fonts.bunny.net/css?family=azeret-mono:400,700,900); */
 
@@ -200,7 +203,7 @@
       width: 100%;
       height: 100%;
     }
-
+    
     @keyframes animStar {
       from {
         transform: translateY(0px);
@@ -315,13 +318,11 @@
           </div>
           <div class="game-status-item">
             <div class="game-status-label">Next</div>
-            <img id="game-next-fruit" src="./assets/img-planet/circle0.png" />
+            <img id="game-next-fruit" src="/static/img-planet/circle0.png" />
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script type="text/javascript" src="./matter.js"></script>
-  <script type="text/javascript" src="./index.js?v=4"></script>
 </body>
 </html>

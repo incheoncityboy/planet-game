@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, render_template, send_from_directory
 import sqlite3
 from datetime import datetime, timezone
 from dotenv import load_dotenv
@@ -8,18 +8,37 @@ from init_db import init_db
 # .env 파일 로드
 load_dotenv()
 
-app = Flask(__name__)
+# 현재 파일의 절대 경로를 가져옴
+basedir = os.path.abspath(os.path.dirname(__file__))
+print(f"Template folder: {os.path.join(basedir, '../../frontend')}")
+
+# Flask에서 템플릿 폴더 및 정적 파일 폴더 설정
+app = Flask(__name__,
+            template_folder=os.path.join(basedir, '../../frontend'),
+            static_url_path='/static',
+            static_folder=os.path.join(basedir, '../../frontend/assets'))
 
 # 환경 변수에서 SECRET_KEY를 불러오고, 없으면 안전한 기본 키를 생성
 secret_key = os.getenv('SECRET_KEY', 'default_secret_key_if_not_set')
 app.config['SECRET_KEY'] = secret_key
 
-
-
 # 현재 파일(__file__)이 위치한 디렉토리 경로를 기준으로 데이터베이스 파일 경로를 설정합니다.
 DATABASE = os.path.join(os.path.dirname(__file__), 'planet-game.db')
 
+@app.route('/')
+def home():
+    return render_template('login.html')
 
+@app.route('/index.html')
+def index():
+    return send_from_directory(app.template_folder, 'index.html')
+
+@app.route('/test-index-js')
+def test_index_js():
+    return send_from_directory(app.static_folder, 'js/index.js')
+
+
+######################################### 
 def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row

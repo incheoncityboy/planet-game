@@ -306,7 +306,8 @@
           createStars('.stars2', 200);
         });
 
-        async function registerUser(event) {
+                // 회원가입 함수
+                async function registerUser(event) {
             event.preventDefault();
             const username = document.getElementById('reg-user').value;
             const password = document.getElementById('reg-pass').value;
@@ -317,42 +318,57 @@
                 return;
             }
 
-            const response = await fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                alert('Registration successful!');
-            } else {
-                alert(`Registration failed: ${data.message}`);
+                if (response.ok) {
+                    alert('Registration successful!');
+                    // 성공적으로 회원가입 후 로그인 페이지로 리디렉션
+                    document.getElementById('tab-1').checked = true;
+                } else {
+                    alert(`Registration failed: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                alert('An error occurred. Please try again.');
             }
         }
 
+        // 로그인 함수
         async function loginUser(event) {
             event.preventDefault();
             const username = document.getElementById('login-user').value;
             const password = document.getElementById('login-pass').value;
 
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (response.ok) {
-                alert('Login successful!');
-            } else {
-                alert(`Login failed: ${data.message}`);
+                if (response.ok) {
+                    alert('Login successful!');
+                    // 로그인 성공 시 게임 페이지로 리디렉션
+                    window.location.href = '/index.html';
+                } else {
+                    alert(`Login failed: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('An error occurred. Please try again.');
             }
         }
     </script>
