@@ -33,9 +33,15 @@ def home():
 def index():
     return send_from_directory(app.template_folder, 'index.html')
 
+@app.route('/rank.html')
+def rank():
+    return render_template('rank.html')
+
 @app.route('/test-index-js')
 def test_index_js():
     return send_from_directory(app.static_folder, 'js/index.js')
+
+
 
 
 ######################################### 
@@ -128,9 +134,26 @@ def register():
     db.commit()
     return jsonify({"status": "success"}), 201
 
+# @app.route('/api/rank', methods=['POST'])
+# def update_rank():
+#     data = request.json
+#     db = get_db()
+#     cursor = db.cursor()
+
+#     cursor.execute('SELECT * FROM User WHERE username = ?', (data['username'],))
+#     user = cursor.fetchone()
+
+#     if user:
+#         cursor.execute('INSERT INTO Ranking (user_id, score, timestamp) VALUES (?, ?, ?)', (user['id'], data['score'], datetime.now(timezone.utc)))
+#         db.commit()
+#         return jsonify({"message": "Score updated successfully"}), 201
+
+#     return jsonify({"message": "User not found"}), 404
+
 @app.route('/api/rank', methods=['POST'])
 def update_rank():
     data = request.json
+    print(f"Received data: {data}")  # 로그 추가
     db = get_db()
     cursor = db.cursor()
 
@@ -142,7 +165,9 @@ def update_rank():
         db.commit()
         return jsonify({"message": "Score updated successfully"}), 201
 
+    print("User not found")  # 로그 추가
     return jsonify({"message": "User not found"}), 404
+
 
 @app.route('/api/rank', methods=['GET'])
 def get_rank():

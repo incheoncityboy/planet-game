@@ -344,33 +344,55 @@
 
         // 로그인 함수
         async function loginUser(event) {
-            event.preventDefault();
-            const username = document.getElementById('login-user').value;
-            const password = document.getElementById('login-pass').value;
+    event.preventDefault();
+    const username = document.getElementById('login-user').value;
+    const password = document.getElementById('login-pass').value;
 
-            try {
-                const response = await fetch('/api/login', {
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Login successful!');
+            sessionStorage.setItem('username', username); // username을 sessionStorage에 저장
+
+            // 이전에 저장된 점수가 있는지 확인
+            const score = localStorage.getItem('latestScore');
+            if (score) {
+                // 점수가 있다면 서버로 전송
+                await fetch('/api/rank', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password }),
+                    body: JSON.stringify({
+                        username: username,
+                        score: parseInt(score),
+                    }),
                 });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Login successful!');
-                    // 로그인 성공 시 게임 페이지로 리디렉션
-                    window.location.href = '/index.html';
-                } else {
-                    alert(`Login failed: ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error during login:', error);
-                alert('An error occurred. Please try again.');
+                // 점수 전송 후 랭킹 페이지로 이동
+                window.location.href = '/rank.html';
+            } else {
+                // 점수가 없으면 게임 페이지로 리디렉션
+                window.location.href = '/index.html';
             }
+        } else {
+            alert(`Login failed: ${data.message}`);
         }
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+
     </script>
 </head>
 <body>

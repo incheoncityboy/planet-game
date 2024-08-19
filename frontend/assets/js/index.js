@@ -1,5 +1,17 @@
 // const Matter = require('matter-js');
 document.addEventListener('DOMContentLoaded', function() {
+	
+	const endGameButton = document.getElementById('end-game-button');
+    if (endGameButton) {
+        console.log("X 버튼이 발견되었습니다.");
+        endGameButton.addEventListener('click', function() {
+            console.log("X 버튼이 클릭되었습니다.");
+            Game.loseGame();
+        });
+    } else {
+        console.log("X 버튼을 찾을 수 없습니다.");
+    }
+
 function mulberry32(a) {
 	return function() {
 		let t = a += 0x6D2B79F5;
@@ -243,7 +255,62 @@ const Game = {
 		Game.elements.end.style.display = 'flex';
 		runner.enabled = false;
 		Game.saveHighscore();
+	
+		// 점수를 localStorage에 저장
+		localStorage.setItem('latestScore', Game.score);
+
+		// 로그인 상태 확인
+		fetch('/api/login', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.status === 'success') {
+				// 로그인 되어 있으면 서버로 점수 전송
+				Game.submitScoreAndRedirect();
+			} else {
+				// 로그인 안되어 있으면 로그인 페이지로 리디렉션
+				window.location.href = '/';
+			}
+		});
 	},
+	
+	submitScoreAndRedirect: function () {
+		const username = sessionStorage.getItem('username');  // 저장된 username 가져오기
+		const score = localStorage.getItem('latestScore');  // 저장된 점수 가져오기
+	
+		if (!username || !score) {
+			console.error('User is not logged in or no score available.');
+			window.location.href = '/';  // 로그인 페이지로 리디렉션
+			return;
+		}
+	
+		fetch('/api/rank', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				username: username,
+				score: parseInt(score),   // 점수를 서버로 전송
+			}),
+		})
+		.then(response => {
+			if (response.ok) {
+				// 점수 전송 성공 시 랭킹 페이지로 리디렉션
+				window.location.href = '/rank.html';
+			} else {
+				alert('Failed to submit score.');
+			}
+		});
+	},
+	
+	
+
+	
 
 	// Returns an index, or null
 	lookupFruitIndex: function (radius) {
