@@ -289,110 +289,120 @@
 
     </style>
     <script>
-        function createStars(className, numStars) {
-          let stars = '';
-          for (let i = 0; i < numStars; i++) {
+    function createStars(className, numStars) {
+        let stars = '';
+        for (let i = 0; i < numStars; i++) {
             const x = Math.random() * 2560;
             const y = Math.random() * 2560;
             stars += `${x}px ${y}px #FFF, `;
-          }
-          stars = stars.slice(0, -2); // Remove the trailing comma and space
-          document.querySelector(className).style.boxShadow = stars;
         }
-      
-        document.addEventListener("DOMContentLoaded", () => {
-          createStars('.stars', 1700);
-          createStars('.stars1', 700);
-          createStars('.stars2', 200);
-        });
-
-                // 회원가입 함수
-                async function registerUser(event) {
-            event.preventDefault();
-            const username = document.getElementById('reg-user').value;
-            const password = document.getElementById('reg-pass').value;
-            const repeatPassword = document.getElementById('repeat-pass').value;
-
-            if (password !== repeatPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Registration successful!');
-                    // 성공적으로 회원가입 후 로그인 페이지로 리디렉션
-                    document.getElementById('tab-1').checked = true;
-                } else {
-                    alert(`Registration failed: ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Error during registration:', error);
-                alert('An error occurred. Please try again.');
-            }
-        }
-
-        // 로그인 함수
-        async function loginUser(event) {
-    event.preventDefault();
-    const username = document.getElementById('login-user').value;
-    const password = document.getElementById('login-pass').value;
-
-    try {
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert('Login successful!');
-            sessionStorage.setItem('username', username); // username을 sessionStorage에 저장
-
-            // 이전에 저장된 점수가 있는지 확인
-            const score = localStorage.getItem('latestScore');
-            if (score) {
-                // 점수가 있다면 서버로 전송
-                await fetch('/api/rank', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        score: parseInt(score),
-                    }),
-                });
-
-                // 점수 전송 후 랭킹 페이지로 이동
-                window.location.href = '/rank.html';
-            } else {
-                // 점수가 없으면 게임 페이지로 리디렉션
-                window.location.href = '/index.html';
-            }
-        } else {
-            alert(`Login failed: ${data.message}`);
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        alert('An error occurred. Please try again.');
+        stars = stars.slice(0, -2); // Remove the trailing comma and space
+        document.querySelector(className).style.boxShadow = stars;
     }
-}
+  
+    document.addEventListener("DOMContentLoaded", () => {
+        createStars('.stars', 1700);
+        createStars('.stars1', 700);
+        createStars('.stars2', 200);
+    });
 
+    // 쿠키에 username 저장하는 함수
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    // 회원가입 함수
+    async function registerUser(event) {
+        event.preventDefault();
+        const username = document.getElementById('reg-user').value;
+        const password = document.getElementById('reg-pass').value;
+        const repeatPassword = document.getElementById('repeat-pass').value;
+
+        if (password !== repeatPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Registration successful!');
+                // 성공적으로 회원가입 후 로그인 페이지로 리디렉션
+                document.getElementById('tab-1').checked = true;
+            } else {
+                alert(`Registration failed: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+
+    // 로그인 함수
+    async function loginUser(event) {
+        event.preventDefault();
+        const username = document.getElementById('login-user').value;
+        const password = document.getElementById('login-pass').value;
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Login successful!');
+                setCookie('username', username, 7); // username을 쿠키에 7일 동안 저장
+
+                // 이전에 저장된 점수가 있는지 확인
+                const score = localStorage.getItem('latestScore');
+                if (score) {
+                    // 점수가 있다면 서버로 전송
+                    await fetch('/api/rank', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            score: parseInt(score),
+                        }),
+                    });
+
+                    // 점수 전송 후 랭킹 페이지로 이동
+                    window.location.href = '/rank.html';
+                } else {
+                    // 점수가 없으면 게임 페이지로 리디렉션
+                    window.location.href = '/index.html';
+                }
+            } else {
+                alert(`Login failed: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
     </script>
 </head>
 <body>

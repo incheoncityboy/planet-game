@@ -157,13 +157,35 @@ def update_rank():
     db = get_db()
     cursor = db.cursor()
 
-    cursor.execute('SELECT * FROM User WHERE username = ?', (data['username'],))
+    # 사용자 검색
+    cursor.execute('SELECT id FROM User WHERE username = ?', (data['username'],))
     user = cursor.fetchone()
 
     if user:
-        cursor.execute('INSERT INTO Ranking (user_id, score, timestamp) VALUES (?, ?, ?)', (user['id'], data['score'], datetime.now(timezone.utc)))
-        db.commit()
-        return jsonify({"message": "Score updated successfully"}), 201
+        user_id = user['id']
+        
+        # 기존 점수 검색
+        cursor.execute('SELECT score FROM Ranking WHERE user_id = ?', (user_id,))
+        existing_score = cursor.fetchone()
+        
+        if existing_score:
+            # 새 점수가 기존 점수보다 높으면 업데이트
+            if data['score'] > existing_score['score']:
+                cursor.execute('''
+                    UPDATE Ranking 
+                    SET score = ?, timestamp = ?
+                    WHERE user_id = ?
+                ''', (data['score'], datetime.now(timezone.utc), user_id))
+                db.commit()
+                return jsonify({"message": "Score updated successfully"}), 200
+            else:
+                return jsonify({"message": "Existing score is higher or equal. No update made."}), 200
+        else:
+            # 기존 점수가 없으면 새 점수 삽입
+            cursor.execute('INSERT INTO Ranking (user_id, score, timestamp) VALUES (?, ?, ?)', 
+                           (user_id, data['score'], datetime.now(timezone.utc)))
+            db.commit()
+            return jsonify({"message": "Score added successfully"}), 201
 
     print("User not found")  # 로그 추가
     return jsonify({"message": "User not found"}), 404
@@ -172,6 +194,7 @@ def update_rank():
 @app.route('/api/rank', methods=['GET'])
 def get_rank():
     username = request.args.get('username')
+
     rank_data = ranklist(username)
 
     response = {
@@ -180,6 +203,7 @@ def get_rank():
         "username": username,
         "ranklist": rank_data
     }
+
 
     return jsonify(response)
 
