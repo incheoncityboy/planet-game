@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랭킹 페이지</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap">
     <style>
         :root {
             --starFieldWidth: 2560;
@@ -20,7 +21,7 @@
         }
 
         body {
-        font-family: Arial, sans-serif;
+        font-family: 'Fredoka One', sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
@@ -73,12 +74,12 @@
     #leaderboard li {
         padding: 15px;
         background: rgba(0, 0, 0, 0.5);
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        color: white;
-        border-radius: 5px;
+        color: black;
+        border-radius: 0px;
     }
 
     #leaderboard li.highlight {
@@ -272,63 +273,80 @@
             const leaderboard = document.getElementById('leaderboard');
             leaderboard.innerHTML = '';
 
-            data.ranklist.top_100.forEach(rank => {
+            const currentUser = data.username; // 현재 로그인한 사용자 이름
+
+            data.ranklist.top_100.forEach((rank, index) => {
                 const listItem = document.createElement('li');
 
-                //3순위까지는 이미지 트로피
-
+                // 3순위까지는 이미지 트로피와 지정된 색상
                 let rankDisplay;
                 if (rank.user_rank === 1) {
                     rankDisplay = `<img src="static/img-planet/1.png" alt="1st" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 1위의 배경색
+                    listItem.style.color = '#FFFFFF';
 
                 } else if (rank.user_rank === 2) {
                     rankDisplay = `<img src="static/img-planet/2.png" alt="2nd" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 2위의 배경색
+                    listItem.style.color = '#FFFFFF';
+
                 } else if (rank.user_rank === 3) {
                     rankDisplay = `<img src="static/img-planet/3.png" alt="3rd" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 3위의 배경색
+                    listItem.style.color = '#FFFFFF';
                 } else {
                     rankDisplay = `<span class="rank">${rank.user_rank}</span>`;
+                    // Apply alternating background colors for other ranks
+                    listItem.style.backgroundColor = index % 2 === 0 ? '#D3E3F2' : '#AFC6DA';
                 }
-
 
                 listItem.innerHTML = `
                     ${rankDisplay}
                     <span class="username">${rank.username}</span>
                     <span class="score">${rank.score}</span>
                 `;
-                if (rank.username === data.username) {
+                if (rank.username === currentUser) {
                     listItem.classList.add('highlight');
                 }
+
                 leaderboard.appendChild(listItem);
             });
 
-            data.ranklist.surrounding_100.forEach(rank => {
+            data.ranklist.surrounding_100.forEach((rank, index) => {
                 const listItem = document.createElement('li');
 
                 let rankDisplay;
                 if (rank.user_rank === 1) {
                     rankDisplay = `<img src="static/img-planet/1.png" alt="1st" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 1위의 배경색
                 } else if (rank.user_rank === 2) {
                     rankDisplay = `<img src="static/img-planet/2.png" alt="2nd" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 2위의 배경색
                 } else if (rank.user_rank === 3) {
                     rankDisplay = `<img src="static/img-planet/3.png" alt="3rd" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 3위의 배경색
                 } else {
                     rankDisplay = `<span class="rank">${rank.user_rank}</span>`;
+                    // Apply alternating background colors for other ranks
+                    listItem.style.backgroundColor = index % 2 === 0 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 1)';
                 }
 
-
-                listItem.className = rank.username === data.username ? 'highlight' : '';
                 listItem.innerHTML = `
                     ${rankDisplay}
                     <span class="username">${rank.username}</span>
                     <span class="score">${rank.score}</span>
                 `;
+                if (rank.username === currentUser) {
+                    listItem.classList.add('highlight');
+                }
+
                 leaderboard.appendChild(listItem);
             });
 
             setTimeout(() => {
                 const highlighted = document.querySelector('li.highlight');
                 if (highlighted) {
-                    highlighted.scrollIntoView({block: "center", behavior: "smooth"});
+                    highlighted.scrollIntoView({ block: "center", behavior: "smooth" });
                 }
             }, 100);
         }
@@ -336,6 +354,7 @@
         document.getElementById('startGameImage').addEventListener('click', function() {
             window.location.href = 'index.html';
         });
+
     </script>
 </body>
 </html>
