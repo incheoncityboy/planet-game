@@ -20,147 +20,119 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-            overflow: hidden;
-            position: relative;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+        overflow: hidden;
+        position: relative;
+    }
+
+    #totalContainer {
+        display: flex;
+        flex-direction: column; /* 세로로 정렬 */
+        align-items: center; /* 가로 중앙 정렬 */
+        justify-content: center; /* 세로 중앙 정렬 */
+        gap: 20px; /* 요소들 사이의 간격 */
+    }
+
+    #outerContainer {
+        width: 640px;
+        height: 80vh;
+        justify-content: center;
+        background-size: cover;
+        background-position: top;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        padding: 0 20px;
+        box-sizing: border-box;
+        background-image: url('static/img-planet/background.png');
+    }
+
+    #leaderboardContainer {
+        height: calc(100% - 150px); /* Subtract 150px from the full height */
+        margin-top: 120px; /* Push down the scrollable area */
+        overflow-y: auto; /* Enable scrolling inside this area */
+        padding-top: 0px; /* Optional: Add some padding inside the scrollable area */
+    }
+
+    #leaderboard {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        margin-top: 0px;
+    }
+
+    #leaderboard li {
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.5);
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        border-radius: 5px;
+    }
+
+    #leaderboard li.highlight {
+        background-color: rgba(240, 248, 255, 0.5);
+        font-weight: bold;
+        animation: highlightAnimation 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes highlightAnimation {
+        from {
+            transform: scale(1);
         }
-
-<!--        #outerContainer {-->
-<!--            width: 100%;-->
-<!--            max-width: 640px;-->
-<!--            margin: 0 auto;-->
-<!--            height: 100vh;-->
-<!--            display: flex;-->
-<!--            flex-direction: column;-->
-<!--            align-items: center;-->
-<!--            justify-content: center;-->
-<!--            z-index: 1;-->
-<!--        }-->
-
-        #outerContainer {
-            width:  640px;
-            height: 80vh;
-            justify-content: center;
-            background-size: cover;
-            background-position: top;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            padding: 0 20px;
-            box-sizing: border-box;
-            background-image: url('static/img-planet/background.png');
-            margin-bottom: 20px;
+        to {
+            transform: scale(1.05);
         }
+    }
 
-        #leaderboardContainer {
-            height: calc(100% - 150px); /* Subtract 100px from the full height */
-            margin-top: 120px; /* Push down the scrollable area */
-            overflow-y: auto; /* Enable scrolling inside this area */
-            padding-top: 0px; /* Optional: Add some padding inside the scrollable area */
-        }
+    .rank {
+        font-weight: bold;
+        font-size: 20px;
+        flex-basis: 50px;
+        text-align: left;
+    }
 
-        #leaderboard {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            margin-top: 0px;
-        }
+    .username {
+        flex-grow: 1;
+        font-size: 20px;
+        margin-left: 20px;
+        margin-right: 10px;
+    }
 
-        #leaderboard li {
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.5);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            border-radius: 5px;
-        }
+    .score {
+        font-weight: bold;
+        font-size: 20px;
+        flex-basis: 100px;
+        text-align: right;
+    }
 
-        #leaderboard li.highlight {
-            background-color: rgba(240, 248, 255, 0.5);
-            font-weight: bold;
-            animation: highlightAnimation 1s ease-in-out infinite alternate;
-        }
+    #startGameImage {
+        cursor: pointer;
+        width: 100%;
+        max-width: 200px;
+    }
 
-        @keyframes highlightAnimation {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.05);
-            }
-        }
-
-        .rank {
-            font-weight: bold;
-            font-size: 20px;
-            flex-basis: 50px;
-            text-align: left;
-        }
-
-        .username {
-            flex-grow: 1;
-            font-size: 20px;
-            margin-left: 20px;
-            margin-right: 10px;
-        }
-
-        .score {
-            font-weight: bold;
-            font-size: 20px;
-            flex-basis: 100px;
-            text-align: right;
-        }
-
-<!--        #startGameButton {-->
-<!--            background-color: #fff346;-->
-<!--            color: #000;-->
-<!--            border: none;-->
-<!--            border-radius: 5px;-->
-<!--            padding: 10px 15px;-->
-<!--            font-size: 20px;-->
-<!--            cursor: pointer;-->
-<!--            box-sizing: border-box;-->
-<!--            text-align: center;-->
-<!--            width: 100%;-->
-<!--            max-width: 200px;-->
-<!--        }-->
-
-<!--        #startGameButton:hover {-->
-<!--            background-color: #94936a;-->
-<!--        }-->
-
-        #startGameButton {
-            display: none; /* Hide the original button */
-        }
-
-        #startGameImage {
-            cursor: pointer;
-            width: 100%;
-            max-width: 200px;
-        }
-
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-            overflow: hidden;
-        }
-
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+        overflow: hidden;
+    }
         .stars, .stars1, .stars2, .shooting-stars {
             position: absolute;
             top: 0;
@@ -243,18 +215,17 @@
         <div class="shooting-stars"></div>
     </div>
 
-    <div id="outerContainer">
-        <div id="leaderboardContainer">
-            <ul id="leaderboard">
-                <!-- 순위 리스트가 여기 추가됩니다 -->
-            </ul>
+    <div id="totalContainer">
+        <div id="outerContainer">
+            <div id="leaderboardContainer">
+                <ul id="leaderboard">
+                </ul>
+            </div>
         </div>
-<!--        <button id="startGameButton">START GAME!</button>-->
+        <div>
+            <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
+        </div>
     </div>
-    <div>
-        <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
-    </div>
-
 
      <script>
         function createStars(className, numStars) {
