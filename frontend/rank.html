@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랭킹 페이지</title>
     <style>
+        :root {
+            --starFieldWidth: 2560;
+            --starFieldHeight: 2560;
+            --starStartOffset: 600px;
+
+            --starOneScrollDuration: 100s;
+            --starTwoScrollDuration: 125s;
+            --starThreeScrollDuration: 175s;
+            --numStarOneStars: 1700;
+            --numStarTwoStars: 700;
+            --numStarThreeStars: 200;
+            --numShootingStars: 10;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -14,8 +28,8 @@
             align-items: center;
             height: 100vh;
             background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-            overflow: hidden; /* Ensure stars don't overflow */
-            position: relative; /* Ensure background stars fill the entire page */
+            overflow: hidden;
+            position: relative;
         }
 
         #outerContainer {
@@ -27,39 +41,40 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 1; /* Ensure the content is above the stars */
+            z-index: 1;
         }
 
         #leaderboardContainer {
             width: 100%;
             height: 80%;
             margin-bottom: 20px;
-            background-image: url('static/img-planet/back.png'); /* 백그라운드 이미지 설정 */
-            background-size: cover; /* 이미지가 컨테이너를 덮도록 설정 */
-            background-position: center; /* 이미지의 중심을 기준으로 배치 */
+            background-image: url('static/img-planet/background.png');
+            background-size: cover;
+            background-position: top;
             border-radius: 8px;
             overflow-y: auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 이미지 위에 그림자 유지 */
-            position: relative; /* 랭킹 리스트를 이미지 위에 표시 */
-            padding: 20px; /* 이미지와 콘텐츠 간 여백 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
         }
 
         #leaderboard {
             list-style: none;
             padding: 0;
             margin: 0;
-            position: relative; /* 백그라운드 이미지 위에 리스트가 표시되도록 설정 */
+            position: relative;
+            margin-top: 100px;
         }
 
         #leaderboard li {
             padding: 15px;
-            background: rgba(0, 0, 0, 0.5); /* 항목 배경을 반투명하게 설정하여 이미지와 대비 */
-            margin-bottom: 10px; /* 항목 간의 간격 */
+            background: rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
-            align-items: center; /* 아이템을 중앙 정렬 */
-            color: white; /* 텍스트 색상을 흰색으로 설정 */
-            border-radius: 5px; /* 항목의 모서리를 둥글게 */
+            align-items: center;
+            color: white;
+            border-radius: 5px;
         }
 
         #leaderboard li.highlight {
@@ -79,53 +94,62 @@
 
         .rank {
             font-weight: bold;
-            font-size: 20px; /* 등수를 크게 표시 */
-            flex-basis: 50px; /* 등수의 너비를 고정 */
+            font-size: 20px;
+            flex-basis: 50px;
             text-align: left;
         }
 
         .username {
-            flex-grow: 1; /* 이름이 가변적으로 공간을 차지 */
+            flex-grow: 1;
             font-size: 20px;
-            margin-left: 20px; /* 왼쪽 여백 증가 */
-            margin-right: 10px; /* 오른쪽 여백 */
+            margin-left: 20px;
+            margin-right: 10px;
         }
 
         .score {
             font-weight: bold;
-            font-size: 20px; /* 점수를 크게 표시 */
-            flex-basis: 100px; /* 점수의 너비를 고정 */
+            font-size: 20px;
+            flex-basis: 100px;
             text-align: right;
         }
 
+<!--        #startGameButton {-->
+<!--            background-color: #fff346;-->
+<!--            color: #000;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            padding: 10px 15px;-->
+<!--            font-size: 20px;-->
+<!--            cursor: pointer;-->
+<!--            box-sizing: border-box;-->
+<!--            text-align: center;-->
+<!--            width: 100%;-->
+<!--            max-width: 200px;-->
+<!--        }-->
+
+<!--        #startGameButton:hover {-->
+<!--            background-color: #94936a;-->
+<!--        }-->
+
         #startGameButton {
-            background-color: #fff346;
-            color: #000; /* 텍스트 색상을 검은색으로 설정 */
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px; /* 적절한 여백 설정 */
-            font-size: 20px; /* 고정된 글꼴 크기 */
+            display: none; /* Hide the original button */
+        }
+
+        #startGameImage {
             cursor: pointer;
-            box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
-            text-align: center; /* 텍스트를 중앙에 위치 */
-            width: 100%; /* 버튼 너비를 100%로 설정 */
-            max-width: 200px; /* 최대 너비를 설정 */
+            width: 100%;
+            max-width: 200px;
         }
 
-        #startGameButton:hover {
-            background-color: #94936a; /* 조금 어두운 색으로 변경 */
-        }
-
-        /* 배경 별 */
         .background {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            overflow: hidden; /* Ensure stars don't overflow */
-            pointer-events: none; /* Prevent interaction with the background */
+            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+            overflow: hidden;
         }
 
         .stars, .stars1, .stars2, .shooting-stars {
@@ -165,7 +189,7 @@
             border-radius: 50%;
             background: transparent;
             box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
-            animation: animStar 100s linear infinite;
+            animation: animStar var(--starOneScrollDuration) linear infinite;
         }
 
         .stars1 {
@@ -175,7 +199,7 @@
             border-radius: 50%;
             background: transparent;
             box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
-            animation: animStar 125s linear infinite;
+            animation: animStar var(--starTwoScrollDuration) linear infinite;
         }
 
         .stars2 {
@@ -185,7 +209,7 @@
             border-radius: 50%;
             background: transparent;
             box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
-            animation: animStar 175s linear infinite;
+            animation: animStar var(--starThreeScrollDuration) linear infinite;
         }
 
         .shooting-stars {
@@ -200,7 +224,6 @@
             background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
             animation: animShootingStar 10s linear infinite;
         }
-
     </style>
 </head>
 <body>
@@ -217,12 +240,27 @@
                 <!-- 순위 리스트가 여기 추가됩니다 -->
             </ul>
         </div>
-        <button id="startGameButton">START GAME!</button>
+<!--        <button id="startGameButton">START GAME!</button>-->
+        <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
     </div>
 
-    <script>
+     <script>
+        function createStars(className, numStars) {
+            let stars = '';
+            for (let i = 0; i < numStars; i++) {
+                const x = Math.random() * 2560;
+                const y = Math.random() * 2560;
+                stars += `${x}px ${y}px #FFF, `;
+            }
+            stars = stars.slice(0, -2); // Remove the trailing comma and space
+            document.querySelector(className).style.boxShadow = stars;
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
-            loadRankings();  // 페이지 로드 시 랭킹 데이터 로드
+            createStars('.stars', 1700);
+            createStars('.stars1', 700);
+            createStars('.stars2', 200);
+            loadRankings();
         });
 
         async function loadRankings() {
@@ -275,7 +313,7 @@
             }, 100);
         }
 
-        document.getElementById('startGameButton').addEventListener('click', function() {
+        document.getElementById('startGameImage').addEventListener('click', function() {
             window.location.href = 'index.html';
         });
     </script>
