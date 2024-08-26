@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랭킹 페이지</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap">
     <style>
         :root {
             --starFieldWidth: 2560;
@@ -20,210 +21,199 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-            overflow: hidden;
-            position: relative;
+        font-family: 'Fredoka One', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+        overflow: hidden;
+        position: relative;
+    }
+
+    #totalContainer {
+        display: flex;
+        flex-direction: column; /* 세로로 정렬 */
+        align-items: center; /* 가로 중앙 정렬 */
+        justify-content: center; /* 세로 중앙 정렬 */
+        gap: 20px; /* 요소들 사이의 간격 */
+    }
+
+    #outerContainer {
+        width: 640px;
+        height: 80vh;
+        justify-content: center;
+        background-size: cover;
+        background-position: top;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        padding: 0 20px;
+        box-sizing: border-box;
+        background-image: url('static/img-planet/background.png');
+    }
+
+    #leaderboardContainer {
+        height: calc(100% - 150px); /* Subtract 150px from the full height */
+        margin-top: 120px; /* Push down the scrollable area */
+        overflow-y: auto; /* Enable scrolling inside this area */
+        padding-top: 0px; /* Optional: Add some padding inside the scrollable area */
+    }
+
+    #leaderboard {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        margin-top: 0px;
+    }
+
+    #leaderboard li {
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.5);
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: black;
+        border-radius: 0px;
+    }
+
+    #leaderboard li.highlight {
+        background-color: rgba(240, 248, 255, 0.5);
+        font-weight: bold;
+        animation: highlightAnimation 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes highlightAnimation {
+        from {
+            transform: scale(1);
         }
-
-        #outerContainer {
-            width: 100%;
-            max-width: 640px;
-            margin: 0 auto;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
+        to {
+            transform: scale(1.05);
         }
+    }
 
-        #leaderboardContainer {
-            width: 100%;
-            height: 80%;
-            margin-bottom: 20px;
-            background-image: url('static/img-planet/background.png');
-            background-size: cover;
-            background-position: top;
-            border-radius: 8px;
-            overflow-y: auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            padding: 20px;
+    .rank {
+        font-weight: bold;
+        font-size: 20px;
+        flex-basis: 50px;
+        text-align: left;
+    }
+
+    .username {
+        flex-grow: 1;
+        font-size: 20px;
+        margin-left: 20px;
+        margin-right: 10px;
+    }
+
+    .score {
+        font-weight: bold;
+        font-size: 20px;
+        flex-basis: 100px;
+        text-align: right;
+    }
+
+    #startGameImage {
+        cursor: pointer;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .trophy {
+        width: 45px;
+        height: auto;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+        overflow: hidden;
+    }
+
+    .stars, .stars1, .stars2, .shooting-stars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    @keyframes animStar {
+        from {
+            transform: translateY(0px);
         }
-
-        #leaderboard {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            margin-top: 100px;
+        to {
+            transform: translateY(-2560px) translateX(-2560px);
         }
+    }
 
-        #leaderboard li {
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.5);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            border-radius: 5px;
+    @keyframes animShootingStar {
+        from {
+            transform: translateY(0px) translateX(0px) rotate(-45deg);
+            opacity: 1;
+            height: 5px;
         }
-
-        #leaderboard li.highlight {
-            background-color: rgba(240, 248, 255, 0.5);
-            font-weight: bold;
-            animation: highlightAnimation 1s ease-in-out infinite alternate;
+        to {
+            transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
+            opacity: 1;
+            height: 800px;
         }
+    }
 
-        @keyframes highlightAnimation {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.05);
-            }
-        }
+    .stars {
+        z-index: 10;
+        width: 1px;
+        height: 1px;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
+        animation: animStar var(--starOneScrollDuration) linear infinite;
+    }
 
-        .rank {
-            font-weight: bold;
-            font-size: 20px;
-            flex-basis: 50px;
-            text-align: left;
-        }
+    .stars1 {
+        z-index: 10;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
+        animation: animStar var(--starTwoScrollDuration) linear infinite;
+    }
 
-        .username {
-            flex-grow: 1;
-            font-size: 20px;
-            margin-left: 20px;
-            margin-right: 10px;
-        }
+    .stars2 {
+        z-index: 10;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: transparent;
+        box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
+        animation: animStar var(--starThreeScrollDuration) linear infinite;
+    }
 
-        .score {
-            font-weight: bold;
-            font-size: 20px;
-            flex-basis: 100px;
-            text-align: right;
-        }
-
-<!--        #startGameButton {-->
-<!--            background-color: #fff346;-->
-<!--            color: #000;-->
-<!--            border: none;-->
-<!--            border-radius: 5px;-->
-<!--            padding: 10px 15px;-->
-<!--            font-size: 20px;-->
-<!--            cursor: pointer;-->
-<!--            box-sizing: border-box;-->
-<!--            text-align: center;-->
-<!--            width: 100%;-->
-<!--            max-width: 200px;-->
-<!--        }-->
-
-<!--        #startGameButton:hover {-->
-<!--            background-color: #94936a;-->
-<!--        }-->
-
-        #startGameButton {
-            display: none; /* Hide the original button */
-        }
-
-        #startGameImage {
-            cursor: pointer;
-            width: 100%;
-            max-width: 200px;
-        }
-
-        .background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-            overflow: hidden;
-        }
-
-        .stars, .stars1, .stars2, .shooting-stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        @keyframes animStar {
-            from {
-                transform: translateY(0px);
-            }
-            to {
-                transform: translateY(-2560px) translateX(-2560px);
-            }
-        }
-
-        @keyframes animShootingStar {
-            from {
-                transform: translateY(0px) translateX(0px) rotate(-45deg);
-                opacity: 1;
-                height: 5px;
-            }
-            to {
-                transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
-                opacity: 1;
-                height: 800px;
-            }
-        }
-
-        .stars {
-            z-index: 10;
-            width: 1px;
-            height: 1px;
-            border-radius: 50%;
-            background: transparent;
-            box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
-            animation: animStar var(--starOneScrollDuration) linear infinite;
-        }
-
-        .stars1 {
-            z-index: 10;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            background: transparent;
-            box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
-            animation: animStar var(--starTwoScrollDuration) linear infinite;
-        }
-
-        .stars2 {
-            z-index: 10;
-            width: 3px;
-            height: 3px;
-            border-radius: 50%;
-            background: transparent;
-            box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
-            animation: animStar var(--starThreeScrollDuration) linear infinite;
-        }
-
-        .shooting-stars {
-            z-index: 10;
-            width: 5px;
-            height: 10px;
-            border-top-left-radius: 50%;
-            border-top-right-radius: 50%;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
-            animation: animShootingStar 10s linear infinite;
-        }
+    .shooting-stars {
+        z-index: 10;
+        width: 5px;
+        height: 10px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+        animation: animShootingStar 10s linear infinite;
+    }
     </style>
 </head>
 <body>
@@ -234,14 +224,16 @@
         <div class="shooting-stars"></div>
     </div>
 
-    <div id="outerContainer">
-        <div id="leaderboardContainer">
-            <ul id="leaderboard">
-                <!-- 순위 리스트가 여기 추가됩니다 -->
-            </ul>
+    <div id="totalContainer">
+        <div id="outerContainer">
+            <div id="leaderboardContainer">
+                <ul id="leaderboard">
+                </ul>
+            </div>
         </div>
-<!--        <button id="startGameButton">START GAME!</button>-->
-        <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
+        <div>
+            <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
+        </div>
     </div>
 
      <script>
@@ -281,34 +273,80 @@
             const leaderboard = document.getElementById('leaderboard');
             leaderboard.innerHTML = '';
 
-            data.ranklist.top_100.forEach(rank => {
+            const currentUser = data.username; // 현재 로그인한 사용자 이름
+
+            data.ranklist.top_100.forEach((rank, index) => {
                 const listItem = document.createElement('li');
+
+                // 3순위까지는 이미지 트로피와 지정된 색상
+                let rankDisplay;
+                if (rank.user_rank === 1) {
+                    rankDisplay = `<img src="static/img-planet/1.png" alt="1st" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 1위의 배경색
+                    listItem.style.color = '#FFFFFF';
+
+                } else if (rank.user_rank === 2) {
+                    rankDisplay = `<img src="static/img-planet/2.png" alt="2nd" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 2위의 배경색
+                    listItem.style.color = '#FFFFFF';
+
+                } else if (rank.user_rank === 3) {
+                    rankDisplay = `<img src="static/img-planet/3.png" alt="3rd" class="trophy">`;
+                    listItem.style.backgroundColor = '#0D3152'; // 3위의 배경색
+                    listItem.style.color = '#FFFFFF';
+                } else {
+                    rankDisplay = `<span class="rank">${rank.user_rank}</span>`;
+                    // Apply alternating background colors for other ranks
+                    listItem.style.backgroundColor = index % 2 === 0 ? '#D3E3F2' : '#AFC6DA';
+                }
+
                 listItem.innerHTML = `
-                    <span class="rank">${rank.user_rank}</span>
+                    ${rankDisplay}
                     <span class="username">${rank.username}</span>
                     <span class="score">${rank.score}</span>
                 `;
-                if (rank.username === data.username) {
+                if (rank.username === currentUser) {
                     listItem.classList.add('highlight');
                 }
+
                 leaderboard.appendChild(listItem);
             });
 
-            data.ranklist.surrounding_100.forEach(rank => {
+            data.ranklist.surrounding_100.forEach((rank, index) => {
                 const listItem = document.createElement('li');
-                listItem.className = rank.username === data.username ? 'highlight' : '';
+
+                let rankDisplay;
+                if (rank.user_rank === 1) {
+                    rankDisplay = `<img src="static/img-planet/1.png" alt="1st" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 1위의 배경색
+                } else if (rank.user_rank === 2) {
+                    rankDisplay = `<img src="static/img-planet/2.png" alt="2nd" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 2위의 배경색
+                } else if (rank.user_rank === 3) {
+                    rankDisplay = `<img src="static/img-planet/3.png" alt="3rd" class="trophy">`;
+                    listItem.style.backgroundColor = '#D9FB51'; // 3위의 배경색
+                } else {
+                    rankDisplay = `<span class="rank">${rank.user_rank}</span>`;
+                    // Apply alternating background colors for other ranks
+                    listItem.style.backgroundColor = index % 2 === 0 ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 1)';
+                }
+
                 listItem.innerHTML = `
-                    <span class="rank">${rank.user_rank}</span>
+                    ${rankDisplay}
                     <span class="username">${rank.username}</span>
                     <span class="score">${rank.score}</span>
                 `;
+                if (rank.username === currentUser) {
+                    listItem.classList.add('highlight');
+                }
+
                 leaderboard.appendChild(listItem);
             });
 
             setTimeout(() => {
                 const highlighted = document.querySelector('li.highlight');
                 if (highlighted) {
-                    highlighted.scrollIntoView({block: "center", behavior: "smooth"});
+                    highlighted.scrollIntoView({ block: "center", behavior: "smooth" });
                 }
             }, 100);
         }
@@ -316,6 +354,7 @@
         document.getElementById('startGameImage').addEventListener('click', function() {
             window.location.href = 'index.html';
         });
+
     </script>
 </body>
 </html>
