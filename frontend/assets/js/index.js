@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("X 버튼을 찾을 수 없습니다.");
     }
+	// 모달 버튼 클릭 이벤트 처리
+	document.getElementById('go-to-login').addEventListener('click', function() {
+		window.location.href = '/login';  // 로그인 페이지로 리디렉션
+	});
+	
+	document.getElementById('play-again').addEventListener('click', function() {
+		window.location.reload();  // 현재 페이지 새로고침
+	});
+	
 
 function mulberry32(a) {
 	return function() {
@@ -258,7 +267,7 @@ const Game = {
 	
 		// 점수를 localStorage에 저장
 		localStorage.setItem('latestScore', Game.score);
-
+	
 		// 로그인 상태 확인
 		fetch('/api/login', {
 			method: 'GET',
@@ -272,19 +281,19 @@ const Game = {
 				// 로그인 되어 있으면 서버로 점수 전송
 				Game.submitScoreAndRedirect();
 			} else {
-				// 로그인 안되어 있으면 로그인 페이지로 리디렉션
-				window.location.href = '/';
+				// 로그인 안되어 있으면 모달 표시
+				document.getElementById('login-modal').style.display = 'flex';
 			}
 		});
 	},
 	
 	submitScoreAndRedirect: function () {
-		const username = sessionStorage.getItem('username');  // 저장된 username 가져오기
+		const username = sessionStorage.getItem('username');  // 쿠키나 sessionStorage에서 username 가져오기
 		const score = localStorage.getItem('latestScore');  // 저장된 점수 가져오기
 	
 		if (!username || !score) {
 			console.error('User is not logged in or no score available.');
-			window.location.href = '/';  // 로그인 페이지로 리디렉션
+			window.location.href = '/login';  // 로그인 페이지로 리디렉션
 			return;
 		}
 	
@@ -307,6 +316,8 @@ const Game = {
 			}
 		});
 	},
+	
+
 	
 	
 

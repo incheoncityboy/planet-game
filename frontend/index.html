@@ -278,7 +278,43 @@
       background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
       animation: animShootingStar 10s linear infinite;
     }
+    /* 모달 스타일 */
+      /* 모달 스타일 */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
+  .modal-content {
+    background-color: var(--col-bg-lighter);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: var(--col-primary-dark);
+  }
+
+  .modal-content button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: var(--col-primary-light);
+    border: none;
+    border-radius: 5px;
+    color: white;
+  }
+
+  .modal-content button:hover {
+    background-color: var(--col-primary);
+  }
 </style>
 <script>
   function createStars(className, numStars) {
@@ -332,6 +368,13 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div id="login-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <p>간단한 로그인을 통해 내 점수와 랭킹을 확인하세요!</p>
+      <button id="go-to-login">로그인 하러가기</button>
+      <button id="play-again">그냥 게임 한 번 더 할래요</button>
     </div>
   </div>
 </body>
