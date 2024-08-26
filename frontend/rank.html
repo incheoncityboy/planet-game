@@ -5,227 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랭킹 페이지</title>
     <style>
+        :root {
+            --starFieldWidth: 2560;
+            --starFieldHeight: 2560;
+            --starStartOffset: 600px;
+
+            --starOneScrollDuration: 100s;
+            --starTwoScrollDuration: 125s;
+            --starThreeScrollDuration: 175s;
+            --numStarOneStars: 1700;
+            --numStarTwoStars: 700;
+            --numStarThreeStars: 200;
+            --numShootingStars: 10;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+            overflow: hidden;
+            position: relative;
         }
 
         #outerContainer {
-    width: 100%;
-    max-width: 640px;
-    margin: 0 auto;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* 화면 중앙에 배치 */
-    background-color: var(--col-bg); /* 배경색 추가 */
-}
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
 
-#leaderboardContainer {
-    width: 100%;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    height: 80%; /* 새로 7개 정도 보이도록 조절 */
-    margin-bottom: 20px; /* 버튼과의 간격 */
-}
+        #leaderboardContainer {
+            width: 100%;
+            height: 80%;
+            margin-bottom: 20px;
+            background-image: url('static/img-planet/background.png');
+            background-size: cover;
+            background-position: top;
+            border-radius: 8px;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 20px;
+        }
 
         #leaderboard {
             list-style: none;
             padding: 0;
             margin: 0;
+            position: relative;
+            margin-top: 100px;
         }
 
         #leaderboard li {
-            padding: 35px;
-            border-bottom: 1px solid #ddd;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            color: white;
+            border-radius: 5px;
         }
 
         #leaderboard li.highlight {
-            background-color: #f0f8ff;
+            background-color: rgba(240, 248, 255, 0.5);
             font-weight: bold;
+            animation: highlightAnimation 1s ease-in-out infinite alternate;
         }
 
-        #leaderboard li:last-child {
-            border-bottom: none;
+        @keyframes highlightAnimation {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
         }
 
+        .rank {
+            font-weight: bold;
+            font-size: 20px;
+            flex-basis: 50px;
+            text-align: left;
+        }
 
+        .username {
+            flex-grow: 1;
+            font-size: 20px;
+            margin-left: 20px;
+            margin-right: 10px;
+        }
 
+        .score {
+            font-weight: bold;
+            font-size: 20px;
+            flex-basis: 100px;
+            text-align: right;
+        }
 
-.rank {
-    font-weight: bold;
-    font-size: 30px; /* 등수를 크게 표시 */
-    color: #333; /* 등수 색상 */
-    flex-basis: 50px; /* 등수의 너비를 고정 */
-    text-align: left;
-}
+<!--        #startGameButton {-->
+<!--            background-color: #fff346;-->
+<!--            color: #000;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            padding: 10px 15px;-->
+<!--            font-size: 20px;-->
+<!--            cursor: pointer;-->
+<!--            box-sizing: border-box;-->
+<!--            text-align: center;-->
+<!--            width: 100%;-->
+<!--            max-width: 200px;-->
+<!--        }-->
 
-.username {
-    flex-grow: 1; /* 이름이 가변적으로 공간을 차지 */
-    font-size: 30px;
-    margin-left: 20px; /* 왼쪽 여백 증가 */
-    margin-right: 10px; /* 오른쪽 여백 */
-}
+<!--        #startGameButton:hover {-->
+<!--            background-color: #94936a;-->
+<!--        }-->
 
-.score {
-    font-weight: bold;
-    font-size: 30px; /* 점수를 크게 표시 */
-    color: #333; /* 점수 색상 */
-    flex-basis: 100px; /* 점수의 너비를 고정 */
-    text-align: right;
-}
+        #startGameButton {
+            display: none; /* Hide the original button */
+        }
 
-#startGameButton {
-    background-color: #fff346;
-    color: #000; /* 텍스트 색상을 검은색으로 설정 */
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px; /* 적절한 여백 설정 */
-    font-size: 20px; /* 고정된 글꼴 크기 */
-    cursor: pointer;
-    box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
-    text-align: center; /* 텍스트를 중앙에 위치 */
-    width: 100%; /* 버튼 너비를 100%로 설정 */
-    max-width: 200px; /* 최대 너비를 설정 */
-}
+        #startGameImage {
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+        }
 
-#startGameButton:hover {
-    background-color: #94936a; /* 조금 어두운 색으로 변경 */
-}
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
+            overflow: hidden;
+        }
 
+        .stars, .stars1, .stars2, .shooting-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
 
+        @keyframes animStar {
+            from {
+                transform: translateY(0px);
+            }
+            to {
+                transform: translateY(-2560px) translateX(-2560px);
+            }
+        }
 
-/* 배경 별 */
-    /* Variables */
-    :root {
-      --starFieldWidth: 2560;
-      --starFieldHeight: 2560;
-      --starStartOffset: 600px;
+        @keyframes animShootingStar {
+            from {
+                transform: translateY(0px) translateX(0px) rotate(-45deg);
+                opacity: 1;
+                height: 5px;
+            }
+            to {
+                transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
+                opacity: 1;
+                height: 800px;
+            }
+        }
 
-      --starOneScrollDuration: 100s;
-      --starTwoScrollDuration: 125s;
-      --starThreeScrollDuration: 175s;
-      --numStarOneStars: 1700;
-      --numStarTwoStars: 700;
-      --numStarThreeStars: 200;
-      --numShootingStars: 10;
-    }
+        .stars {
+            z-index: 10;
+            width: 1px;
+            height: 1px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
+            animation: animStar var(--starOneScrollDuration) linear infinite;
+        }
 
-    /* Background container */
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: linear-gradient(to bottom, #020107 0%, #201b46 100%);
-      overflow: hidden; /* Ensure stars don't overflow */
-    }
+        .stars1 {
+            z-index: 10;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
+            animation: animStar var(--starTwoScrollDuration) linear infinite;
+        }
 
-    /* Star field layers */
-    .stars, .stars1, .stars2, .shooting-stars {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+        .stars2 {
+            z-index: 10;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
+            animation: animStar var(--starThreeScrollDuration) linear infinite;
+        }
 
-    @keyframes animStar {
-      from {
-        transform: translateY(0px);
-      }
-      to {
-        transform: translateY(-2560px) translateX(-2560px);
-      }
-    }
-
-    @keyframes animShootingStar {
-      from {
-        transform: translateY(0px) translateX(0px) rotate(-45deg);
-        opacity: 1;
-        height: 5px;
-      }
-      to {
-        transform: translateY(-2560px) translateX(-2560px) rotate(-45deg);
-        opacity: 1;
-        height: 800px;
-      }
-    }
-
-    .stars {
-      z-index: 10;
-      width: 1px;
-      height: 1px;
-      border-radius: 50%;
-      background: transparent;
-      box-shadow: 0 0 1px #FFF, 0 0 1px #FFF;
-      animation: animStar var(--starOneScrollDuration) linear infinite;
-    }
-
-    .stars1 {
-      z-index: 10;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: transparent;
-      box-shadow: 0 0 2px #FFF, 0 0 2px #FFF;
-      animation: animStar var(--starTwoScrollDuration) linear infinite;
-    }
-
-    .stars2 {
-      z-index: 10;
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: transparent;
-      box-shadow: 0 0 3px #FFF, 0 0 3px #FFF;
-      animation: animStar var(--starThreeScrollDuration) linear infinite;
-    }
-
-    .shooting-stars {
-      z-index: 10;
-      width: 5px;
-      height: 10px;
-      border-top-left-radius: 50%;
-      border-top-right-radius: 50%;
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
-      animation: animShootingStar 10s linear infinite;
-    }
+        .shooting-stars {
+            z-index: 10;
+            width: 5px;
+            height: 10px;
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
+            animation: animShootingStar 10s linear infinite;
+        }
     </style>
-    <script>
-        function createStars(className, numStars) {
-          let stars = '';
-          for (let i = 0; i < numStars; i++) {
-            const x = Math.random() * 2560;
-            const y = Math.random() * 2560;
-            stars += `${x}px ${y}px #FFF, `;
-          }
-          stars = stars.slice(0, -2); // Remove the trailing comma and space
-          document.querySelector(className).style.boxShadow = stars;
-        }
-      
-        document.addEventListener("DOMContentLoaded", () => {
-          createStars('.stars', 1700);
-          createStars('.stars1', 700);
-          createStars('.stars2', 200);
-        });
-      </script>
 </head>
 <body>
     <div class="background">
@@ -233,7 +232,7 @@
         <div class="stars1"></div>
         <div class="stars2"></div>
         <div class="shooting-stars"></div>
-      </div>
+    </div>
 
     <div id="outerContainer">
         <div id="leaderboardContainer">
@@ -241,101 +240,82 @@
                 <!-- 순위 리스트가 여기 추가됩니다 -->
             </ul>
         </div>
-        <button id="startGameButton">START GAME!</button>
+<!--        <button id="startGameButton">START GAME!</button>-->
+        <img id="startGameImage" src="static/img-planet/game_start.png" alt="Start Game">
     </div>
 
-    <script>
-      function createStars(className, numStars) {
-          let stars = '';
-          for (let i = 0; i < numStars; i++) {
-              const x = Math.random() * 2560;
-              const y = Math.random() * 2560;
-              stars += `${x}px ${y}px #FFF, `;
-          }
-          stars = stars.slice(0, -2); // Remove the trailing comma and space
-          document.querySelector(className).style.boxShadow = stars;
-      }
-  
-      document.addEventListener("DOMContentLoaded", () => {
-          createStars('.stars', 1700);
-          createStars('.stars1', 700);
-          createStars('.stars2', 200);
-          loadRankings();  // 페이지 로드 시 랭킹 데이터 로드
-      });
-  
-      // 쿠키에서 username을 가져오는 함수
-      function getCookie(name) {
-          const nameEQ = name + "=";
-          const ca = document.cookie.split(';');
-          for(let i = 0; i < ca.length; i++) {
-              let c = ca[i];
-              while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-              if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-          }
-          return null;
-      }
-  
-      // 서버에서 랭킹 데이터를 요청하는 함수
-      async function loadRankings() {
-          try {
-              const username = getCookie('username');  // 쿠키에서 username 가져오기
-              if (!username) {
-                  throw new Error('로그인된 사용자를 찾을 수 없습니다.');
-              }
-  
-              const response = await fetch(`/api/rank?username=${username}`);
-              if (!response.ok) {
-                  throw new Error('네트워크 응답이 올바르지 않습니다.');
-              }
-  
-              const data = await response.json();
-              updateLeaderboard(data);
-          } catch (error) {
-              console.error('랭킹 데이터를 가져오는 중 문제가 발생했습니다:', error);
-          }
-      }
-  
-      // 랭킹 데이터를 받아와서 리스트를 업데이트하는 함수
-      function updateLeaderboard(data) {
-          const leaderboard = document.getElementById('leaderboard');
-          leaderboard.innerHTML = '';
-  
-          // 상위 100 리스트 추가
-          data.ranklist.top_100.forEach(rank => {
-              const listItem = document.createElement('li');
-              listItem.innerHTML = `
-                  <span class="rank">${rank.user_rank}</span>
-                  <span class="username">${rank.username}</span>
-                  <span class="score">${rank.score}</span>
-              `;
-              leaderboard.appendChild(listItem);
-          });
-  
-          // 서라운딩 100 리스트 추가
-          data.ranklist.surrounding_100.forEach(rank => {
-              const listItem = document.createElement('li');
-              listItem.className = rank.username === data.username ? 'highlight' : '';  // 현재 사용자 강조
-              listItem.innerHTML = `
-                  <span class="rank">${rank.user_rank}</span>
-                  <span class="username">${rank.username}</span>
-                  <span class="score">${rank.score}</span>
-              `;
-              leaderboard.appendChild(listItem);
-          });
-  
-          // 사용자 랭크가 화면 가운데에 위치하도록 스크롤
-          setTimeout(() => {
-              const highlighted = document.querySelector('li.highlight');
-              if (highlighted) {
-                  highlighted.scrollIntoView({block: "center", behavior: "smooth"});
-              }
-          }, 100);
-      }
-  
-      document.getElementById('startGameButton').addEventListener('click', function() {
-          window.location.href = 'index.html';
-      });
-  </script>
-  
+     <script>
+        function createStars(className, numStars) {
+            let stars = '';
+            for (let i = 0; i < numStars; i++) {
+                const x = Math.random() * 2560;
+                const y = Math.random() * 2560;
+                stars += `${x}px ${y}px #FFF, `;
+            }
+            stars = stars.slice(0, -2); // Remove the trailing comma and space
+            document.querySelector(className).style.boxShadow = stars;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            createStars('.stars', 1700);
+            createStars('.stars1', 700);
+            createStars('.stars2', 200);
+            loadRankings();
+        });
+
+        async function loadRankings() {
+            try {
+                const response = await fetch(`/api/rank`);
+                if (!response.ok) {
+                    throw new Error('네트워크 응답이 올바르지 않습니다.');
+                }
+
+                const data = await response.json();
+                updateLeaderboard(data);
+            } catch (error) {
+                console.error('랭킹 데이터를 가져오는 중 문제가 발생했습니다:', error);
+            }
+        }
+
+        function updateLeaderboard(data) {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+
+            data.ranklist.top_100.forEach(rank => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span class="rank">${rank.user_rank}</span>
+                    <span class="username">${rank.username}</span>
+                    <span class="score">${rank.score}</span>
+                `;
+                if (rank.username === data.username) {
+                    listItem.classList.add('highlight');
+                }
+                leaderboard.appendChild(listItem);
+            });
+
+            data.ranklist.surrounding_100.forEach(rank => {
+                const listItem = document.createElement('li');
+                listItem.className = rank.username === data.username ? 'highlight' : '';
+                listItem.innerHTML = `
+                    <span class="rank">${rank.user_rank}</span>
+                    <span class="username">${rank.username}</span>
+                    <span class="score">${rank.score}</span>
+                `;
+                leaderboard.appendChild(listItem);
+            });
+
+            setTimeout(() => {
+                const highlighted = document.querySelector('li.highlight');
+                if (highlighted) {
+                    highlighted.scrollIntoView({block: "center", behavior: "smooth"});
+                }
+            }, 100);
+        }
+
+        document.getElementById('startGameImage').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
