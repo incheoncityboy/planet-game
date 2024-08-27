@@ -388,34 +388,17 @@ const render = Render.create({
 // #C7AEDA 보라색 배경
 
 const menuStatics = [
-	Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
-		isStatic: true,
-		render: { sprite: { texture: '/static/img/bg-menu.png' } },
-	}),
+    Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
+        isStatic: true,
+        render: { sprite: { texture: '/static/img/bg-menu.png' } },
+    }),
 
-	// Add each fruit in a circle
-	...Array.apply(null, Array(Game.fruitSizes.length)).map((_, index) => {
-		const x = (Game.width / 2) + 192 * Math.cos((Math.PI * 2 * index)/12);
-		const y = (Game.height * 0.4) + 192 * Math.sin((Math.PI * 2 * index)/12);
-		const r = 64;
-
-		return Bodies.circle(x, y, r, {
-			isStatic: true,
-			render: {
-				sprite: {
-					texture: `/static/img-planet/circle${index}.png`,
-					xScale: r / 1024,
-					yScale: r / 1024,
-				},
-			},
-		});
-	}),
-
-	Bodies.rectangle(Game.width / 2, Game.height * 0.75, 512, 96, {
-		isStatic: true,
-		label: 'btn-start',
-		render: { sprite: { texture: '/static/img/btn-start.png' } },
-	}),
+    // Start button
+    Bodies.rectangle(Game.width / 2, Game.height * 0.75, 512, 96, {
+        isStatic: true,
+        label: 'btn-start',
+        render: { sprite: { texture: '/static/img/btn-start.png' } },
+    }),
 ];
 
 const wallProps = {
