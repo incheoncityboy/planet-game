@@ -76,6 +76,7 @@ def ranklist(username):
         # 사용자의 위치를 찾기
         for index, row in enumerate(all_rankings):
             if row['username'] == username:
+
                 user_rank = index + 1  # 순위는 1부터 시작하므로 index + 1
                 start_index = max(index - 50, 0)
                 end_index = min(index + 50, len(all_rankings))
