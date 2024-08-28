@@ -27,7 +27,7 @@ DATABASE = os.path.join(os.path.dirname(__file__), 'planet-game.db')
 
 @app.route('/')
 def home():
-    return render_template('login.html')
+    return send_from_directory(app.template_folder, 'index.html')
 
 @app.route('/index.html')
 def index():
@@ -41,8 +41,9 @@ def rank():
 def test_index_js():
     return send_from_directory(app.static_folder, 'js/index.js')
 
-
-
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
 
 ######################################### 
 def get_db():
@@ -75,6 +76,7 @@ def ranklist(username):
         # 사용자의 위치를 찾기
         for index, row in enumerate(all_rankings):
             if row['username'] == username:
+
                 user_rank = index + 1  # 순위는 1부터 시작하므로 index + 1
                 start_index = max(index - 50, 0)
                 end_index = min(index + 50, len(all_rankings))
@@ -117,6 +119,7 @@ def login():
 @app.route('/api/login', methods=['GET'])
 def login_status():
     if 'user_id' in session:
+        
         return jsonify({"status": "success"})
     return jsonify({"status": "error"})
 
@@ -134,21 +137,7 @@ def register():
     db.commit()
     return jsonify({"status": "success"}), 201
 
-# @app.route('/api/rank', methods=['POST'])
-# def update_rank():
-#     data = request.json
-#     db = get_db()
-#     cursor = db.cursor()
 
-#     cursor.execute('SELECT * FROM User WHERE username = ?', (data['username'],))
-#     user = cursor.fetchone()
-
-#     if user:
-#         cursor.execute('INSERT INTO Ranking (user_id, score, timestamp) VALUES (?, ?, ?)', (user['id'], data['score'], datetime.now(timezone.utc)))
-#         db.commit()
-#         return jsonify({"message": "Score updated successfully"}), 201
-
-#     return jsonify({"message": "User not found"}), 404
 
 @app.route('/api/rank', methods=['POST'])
 def update_rank():
