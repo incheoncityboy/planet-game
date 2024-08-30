@@ -27,12 +27,12 @@
 
 
     :root {
-      --col-bg: #181818;
-      --col-bg-light: #202020;
+      --col-bg: #202020;
+      --col-bg-light: #181818;
       --col-bg-lighter: #ffffff;
-      --col-primary: #FF5300;
+      --col-primary: #D9FB51;
       --col-primary-dark: #FF2700;
-      --col-primary-light: #FF8800;
+      --col-primary-light: #C9F519;
       --col-shadow: rgba(0, 0, 0, 0.25);
       --col-white: #fff;
     }
@@ -45,9 +45,9 @@
     }
 
     body {
-  background-color: var(--col-bg);
-  font-family: 'Nico Moji', sans-serif;
-}
+      background-color: var(--col-bg);
+      font-family: 'Nico Moji', sans-serif;
+    }
 
 
     .container {
@@ -71,16 +71,17 @@
       display: none;
       transform-origin: top left;
     }
+
     #end-game-button {
-  pointer-events: auto; /* end-game-button에 클릭 가능하게 설정 */
-  background: none;
-  border: none;
-  color: red;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 8px;
-}
+      pointer-events: auto; /* end-game-button에 클릭 가능하게 설정 */
+      background: none;
+      border: none;
+      color: red;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 8px;
+    }
 
     #game-score {
       position: absolute;
@@ -278,8 +279,7 @@
       background: linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,1));
       animation: animShootingStar 10s linear infinite;
     }
-    /* 모달 스타일 */
-      /* 모달 스타일 */
+
   .modal {
     position: fixed;
     top: 0;
@@ -287,7 +287,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -295,26 +295,28 @@
 
   .modal-content {
     background-color: var(--col-bg-lighter);
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     text-align: center;
     color: var(--col-primary-dark);
+    font-weight: bold;
   }
 
   .modal-content button {
     margin: 10px;
     padding: 10px 20px;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
     background-color: var(--col-primary-light);
     border: none;
     border-radius: 5px;
-    color: white;
+    color: black;
   }
 
   .modal-content button:hover {
     background-color: var(--col-primary);
   }
+
 </style>
 <script>
   function createStars(className, numStars) {
@@ -327,6 +329,13 @@
     stars = stars.slice(0, -2); // Remove the trailing comma and space
     document.querySelector(className).style.boxShadow = stars;
   }
+
+<!--모달 디버깅용 코드-->
+<!--  document.addEventListener("DOMContentLoaded", () => {-->
+<!--      // 두 개의 모달 모두 표시되도록 설정-->
+<!--      document.getElementById("game-end-container").style.display = "flex";-->
+<!--&lt;!&ndash;      document.getElementById("login-modal").style.display = "flex";&ndash;&gt;-->
+<!--    });-->
 
   document.addEventListener("DOMContentLoaded", () => {
     createStars('.stars', 1700);
