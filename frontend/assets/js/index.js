@@ -62,8 +62,8 @@ const Game = {
 		canvas: document.getElementById('game-canvas'),
 		ui: document.getElementById('game-ui'),
 		score: document.getElementById('game-score'),
-		end: document.getElementById('game-end-container'),
-		endTitle: document.getElementById('game-end-title'),
+		// end: document.getElementById('game-end-container'),
+		// endTitle: document.getElementById('game-end-title'), 제거 후보
 		statusValue: document.getElementById('game-highscore-value'),
 		nextFruitImg: document.getElementById('game-next-fruit'),
 		previewBall: null,
@@ -137,7 +137,7 @@ const Game = {
 
 		Game.cache.highscore = Game.score;
 		Game.showHighscore();
-		Game.elements.endTitle.innerText = 'New Highscore!';
+		// Game.elements.endTitle.innerText = 'New Highscore!';제거후보
 
 		localStorage.setItem('suika-game-cache', JSON.stringify(Game.cache));
 	},
@@ -171,9 +171,9 @@ const Game = {
 		Composite.add(engine.world, gameStatics);
 
 		Game.calculateScore();
-		Game.elements.endTitle.innerText = 'Game Over!';
+		// Game.elements.endTitle.innerText = 'Game Over!';제거후보
 		Game.elements.ui.style.display = 'block';
-		Game.elements.end.style.display = 'none';
+		// Game.elements.end.style.display = 'none';제거후보
 		Game.elements.previewBall = Game.generateFruitBody(Game.width / 2, previewBallHeight, 0, { isStatic: true });
 		Composite.add(engine.world, Game.elements.previewBall);
 
@@ -261,7 +261,7 @@ const Game = {
 
 	loseGame: function () {
 		Game.stateIndex = GameStates.LOSE;
-		Game.elements.end.style.display = 'flex';
+		// Game.elements.end.style.display = 'flex'; 제거후보
 		runner.enabled = false;
 		Game.saveHighscore();
 	
@@ -277,25 +277,34 @@ const Game = {
 		})
 		.then(response => response.json())
 		.then(data => {
+			console.log('Login status check response:', data);  // 로그인 상태 확인 결과를 콘솔에 출력
 			if (data.status === 'success') {
+				console.log(`Logged in as: ${data.username}`); // 로그인된 유저네임을 콘솔에 출력
 				// 로그인 되어 있으면 서버로 점수 전송
-				Game.submitScoreAndRedirect();
+				Game.submitScoreAndRedirect(data.username);
 			} else {
+				console.log('User is not logged in.');
 				// 로그인 안되어 있으면 모달 표시
 				document.getElementById('login-modal').style.display = 'flex';
 			}
+		})
+		.catch(error => {
+			console.error('Error checking login status:', error);
+			alert('Error checking login status, redirecting to login page.');
+			window.location.href = '/login';  // 오류 발생 시 로그인 페이지로 리디렉션
 		});
 	},
 	
-	submitScoreAndRedirect: function () {
-		const username = sessionStorage.getItem('username');  // 쿠키나 sessionStorage에서 username 가져오기
+	submitScoreAndRedirect: function (username) {
 		const score = localStorage.getItem('latestScore');  // 저장된 점수 가져오기
 	
-		if (!username || !score) {
-			console.error('User is not logged in or no score available.');
-			window.location.href = '/login';  // 로그인 페이지로 리디렉션
+		if (!score) {
+			console.error('No score available.');
+			window.location.href = '/login';  // 점수가 없으면 로그인 페이지로 리디렉션
 			return;
 		}
+	
+		console.log(`Submitting score for user: ${username}, score: ${score}`); // 전송할 유저네임과 점수를 콘솔에 출력
 	
 		fetch('/api/rank', {
 			method: 'POST',
@@ -303,19 +312,24 @@ const Game = {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				username: username,
+				username: username,   // 로그인 상태에서 받은 username 사용
 				score: parseInt(score),   // 점수를 서버로 전송
 			}),
 		})
 		.then(response => {
 			if (response.ok) {
+				console.log('Score submitted successfully.');  // 점수 전송 성공 로그
 				// 점수 전송 성공 시 랭킹 페이지로 리디렉션
 				window.location.href = '/rank.html';
 			} else {
 				alert('Failed to submit score.');
 			}
+		})
+		.catch(error => {
+			console.error('Error submitting score:', error);
 		});
 	},
+	
 	
 
 	

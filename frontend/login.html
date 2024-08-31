@@ -316,6 +316,7 @@
             expires = "; expires=" + date.toUTCString();
         }
         document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        console.log(`Cookie set: ${cookieValue}`);
     }
 
     // 회원가입 함수

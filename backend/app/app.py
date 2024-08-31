@@ -118,13 +118,18 @@ def login():
 
     return jsonify({"status": "error"}), 401
 
-@app.route('/api/login', methods=['GET'])
-def login_status():
-    if 'user_id' in session:
-        
-        return jsonify({"status": "success"})
-    return jsonify({"status": "error"})
 
+@app.route('/api/login', methods=['GET'])
+def check_login():
+    # 세션에서 유저네임을 가져옵니다 (가정: 로그인된 유저네임이 세션에 저장됨)
+    username = session.get('username', None)
+    
+    if username:
+        print(f"User is logged in: {username}")  # 서버에서 유저네임을 로그로 출력
+        return jsonify({"status": "success", "username": username})
+    else:
+        print("User is not logged in.")  # 로그인되지 않은 경우 로그 출력
+        return jsonify({"status": "error"}), 401
 
 
 @app.route('/api/register', methods=['POST'])
