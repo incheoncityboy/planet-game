@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 import os
 from init_db import init_db
-
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 # .env 파일 로드
 load_dotenv()
 
@@ -45,7 +46,7 @@ def test_index_js():
 def login_page():
     return render_template('login.html')
 
-######################################### 
+#########################################
 def get_db():
     conn = sqlite3.connect(DATABASE)
     conn.row_factory = sqlite3.Row
@@ -109,7 +110,8 @@ def login():
     cursor.execute('SELECT * FROM User WHERE username = ?', (data['username'],))
     user = cursor.fetchone()
 
-    if user and user['password_hash'] == data['password']:
+    # 비밀번호 검증
+    if user and check_password_hash(user['password_hash'], data['password']):
         session['user_id'] = user['id']
         session['username'] = user['username']
         return jsonify({"status": "success", "ranklist": ranklist(user['username'])})
@@ -123,6 +125,8 @@ def login_status():
         return jsonify({"status": "success"})
     return jsonify({"status": "error"})
 
+
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
@@ -133,9 +137,15 @@ def register():
     if cursor.fetchone():
         return jsonify({"status": "error", "message": "username already exists"}), 409
 
-    cursor.execute('INSERT INTO User (username, password_hash) VALUES (?, ?)', (data['username'], data['password']))
+    # 비밀번호 해시화
+    hashed_password = generate_password_hash(data['password'])
+    
+    cursor.execute('INSERT INTO User (username, password_hash) VALUES (?, ?)', (data['username'], hashed_password))
     db.commit()
     return jsonify({"status": "success"}), 201
+
+
+
 
 
 
