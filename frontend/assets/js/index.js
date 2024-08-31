@@ -390,14 +390,14 @@ const render = Render.create({
 const menuStatics = [
     Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
         isStatic: true,
-        render: { sprite: { texture: '/static/img/planet-bg.png' } },
+        render: { sprite: { texture: '/static/img/planet-src.png' } },
     }),
 
     // Start button
     Bodies.rectangle(Game.width / 2, Game.height * 0.75, 512, 96, {
         isStatic: true,
         label: 'btn-start',
-        render: { sprite: { texture: '/static/img-planet/game-start.png' } },
+        render: { sprite: { texture: '/static/img-planet/game-start-src.png' } },
     }),
 ];
 
