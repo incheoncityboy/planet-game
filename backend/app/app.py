@@ -151,9 +151,6 @@ def register():
 
 
 
-
-
-
 @app.route('/api/rank', methods=['POST'])
 def update_rank():
     data = request.json
