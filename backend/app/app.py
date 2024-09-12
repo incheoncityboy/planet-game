@@ -3,7 +3,7 @@ import sqlite3
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 import os
-from init_db import init_db
+# from init_db import init_db
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 # .env 파일 로드
