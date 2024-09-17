@@ -1,7 +1,47 @@
 // const Matter = require('matter-js');
 document.addEventListener('DOMContentLoaded', function() {
-	
-	const endGameButton = document.getElementById('end-game-button');
+
+    // 프리로딩 함수 추가
+    function preloadImages(imageUrls, callback) {
+        let loadedImages = 0;
+        const totalImages = imageUrls.length;
+        const images = [];
+
+        imageUrls.forEach((url, index) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                loadedImages += 1;
+                if (loadedImages === totalImages && callback) {
+                    callback(images);  // 모든 이미지가 로드되면 콜백 실행
+                }
+            };
+            images[index] = img;
+        });
+    }
+
+    // 로드할 이미지 URL 목록 추가
+    const planetImages = [
+        '/static/img-planet/circle0.png',
+        '/static/img-planet/circle1.png',
+        '/static/img-planet/circle2.png',
+        '/static/img-planet/circle3.png',
+        '/static/img-planet/circle4.png',
+        '/static/img-planet/circle5.png',
+        '/static/img-planet/circle6.png',
+        '/static/img-planet/circle7.png',
+        '/static/img-planet/circle8.png',
+        '/static/img-planet/circle9.png',
+        '/static/img-planet/circle10.png',
+    ];
+
+    // 프리로딩 후 게임 시작
+    preloadImages(planetImages, () => {
+        console.log('All images preloaded');
+        Game.initGame();  // 이미지 로딩 완료 후 게임 시작
+    });
+
+    const endGameButton = document.getElementById('end-game-button');
     if (endGameButton) {
         console.log("X 버튼이 발견되었습니다.");
         endGameButton.addEventListener('click', function() {
@@ -11,158 +51,155 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("X 버튼을 찾을 수 없습니다.");
     }
-	// 모달 버튼 클릭 이벤트 처리
-	document.getElementById('go-to-login').addEventListener('click', function() {
-		window.location.href = '/login';  // 로그인 페이지로 리디렉션
-	});
-	
-	document.getElementById('play-again').addEventListener('click', function() {
-		window.location.reload();  // 현재 페이지 새로고침
-	});
-	
 
-function mulberry32(a) {
-	return function() {
-		let t = a += 0x6D2B79F5;
-		t = Math.imul(t ^ t >>> 15, t | 1);
-		t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-		return ((t ^ t >>> 14) >>> 0) / 4294967296;
-	}
-}
+    // 모달 버튼 클릭 이벤트 처리
+    document.getElementById('go-to-login').addEventListener('click', function() {
+        window.location.href = '/login';  // 로그인 페이지로 리디렉션
+    });
 
-const rand = mulberry32(Date.now());
+    document.getElementById('play-again').addEventListener('click', function() {
+        window.location.reload();  // 현재 페이지 새로고침
+    });
 
-const {
-	Engine, Render, Runner, Composites, Common, MouseConstraint, Mouse,
-	Composite, Bodies, Events,
-} = Matter;
+    function mulberry32(a) {
+        return function() {
+            let t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+    }
 
-const wallPad = 64;
-const loseHeight = 84;
-const statusBarHeight = 48;
-const previewBallHeight = 32;
-const friction = {
-	friction: 0.006,
-	frictionStatic: 0.006,
-	frictionAir: 0,
-	restitution: 0.1
-};
+    const rand = mulberry32(Date.now());
 
-const GameStates = {
-	MENU: 0,
-	READY: 1,
-	DROP: 2,
-	LOSE: 3,
-};
+    const {
+        Engine, Render, Runner, Composites, Common, MouseConstraint, Mouse,
+        Composite, Bodies, Events,
+    } = Matter;
 
-const Game = {
-	width: 640,
-	height: 960,
-	elements: {
-		canvas: document.getElementById('game-canvas'),
-		ui: document.getElementById('game-ui'),
-		score: document.getElementById('game-score'),
-		// end: document.getElementById('game-end-container'),
-		// endTitle: document.getElementById('game-end-title'), 제거 후보
-		statusValue: document.getElementById('game-highscore-value'),
-		nextFruitImg: document.getElementById('game-next-fruit'),
-		previewBall: null,
-	},
-	cache: { highscore: 0 },
-	sounds: {
-		click: new Audio('/static/click.mp3'),
-		pop0: new Audio('/static/pop0.mp3'),
-		pop1: new Audio('/static/pop1.mp3'),
-		pop2: new Audio('/static/pop2.mp3'),
-		pop3: new Audio('/static/pop3.mp3'),
-		pop4: new Audio('/static/pop4.mp3'),
-		pop5: new Audio('/static/pop5.mp3'),
-		pop6: new Audio('/static/pop6.mp3'),
-		pop7: new Audio('/static/pop7.mp3'),
-		pop8: new Audio('/static/pop8.mp3'),
-		pop9: new Audio('/static/pop9.mp3'),
-		pop10: new Audio('/static/pop10.mp3'),
-	},
+    const wallPad = 64;
+    const loseHeight = 84;
+    const statusBarHeight = 48;
+    const previewBallHeight = 32;
+    const friction = {
+        friction: 0.006,
+        frictionStatic: 0.006,
+        frictionAir: 0,
+        restitution: 0.1
+    };
 
-	stateIndex: GameStates.MENU,
+    const GameStates = {
+        MENU: 0,
+        READY: 1,
+        DROP: 2,
+        LOSE: 3,
+    };
 
-	score: 0,
-	fruitsMerged: [],
-	calculateScore: function () {
-		const score = Game.fruitsMerged.reduce((total, count, sizeIndex) => {
-			const value = Game.fruitSizes[sizeIndex].scoreValue * count;
-			return total + value;
-		}, 0);
+    const Game = {
+        width: 640,
+        height: 960,
+        elements: {
+            canvas: document.getElementById('game-canvas'),
+            ui: document.getElementById('game-ui'),
+            score: document.getElementById('game-score'),
+            statusValue: document.getElementById('game-highscore-value'),
+            nextFruitImg: document.getElementById('game-next-fruit'),
+            previewBall: null,
+        },
+        cache: { highscore: 0 },
+        sounds: {
+            click: new Audio('/static/click.mp3'),
+            pop0: new Audio('/static/pop0.mp3'),
+            pop1: new Audio('/static/pop1.mp3'),
+            pop2: new Audio('/static/pop2.mp3'),
+            pop3: new Audio('/static/pop3.mp3'),
+            pop4: new Audio('/static/pop4.mp3'),
+            pop5: new Audio('/static/pop5.mp3'),
+            pop6: new Audio('/static/pop6.mp3'),
+            pop7: new Audio('/static/pop7.mp3'),
+            pop8: new Audio('/static/pop8.mp3'),
+            pop9: new Audio('/static/pop9.mp3'),
+            pop10: new Audio('/static/pop10.mp3'),
+        },
 
-		Game.score = score;
-		Game.elements.score.innerText = Game.score;
-	},
+        stateIndex: GameStates.MENU,
 
-	fruitSizes: [
-		{ radius: 24,  scoreValue: 1,  img: '/static/img-planet/circle0.png'  },
-		{ radius: 32,  scoreValue: 3,  img: '/static/img-planet/circle1.png'  },
-		{ radius: 40,  scoreValue: 6,  img: '/static/img-planet/circle2.png'  },
-		{ radius: 56,  scoreValue: 10, img: '/static/img-planet/circle3.png'  },
-		{ radius: 64,  scoreValue: 15, img: '/static/img-planet/circle4.png'  },
-		{ radius: 72,  scoreValue: 21, img: '/static/img-planet/circle5.png'  },
-		{ radius: 84,  scoreValue: 28, img: '/static/img-planet/circle6.png'  },
-		{ radius: 96,  scoreValue: 36, img: '/static/img-planet/circle7.png'  },
-		{ radius: 128, scoreValue: 45, img: '/static/img-planet/circle8.png'  },
-		{ radius: 160, scoreValue: 55, img: '/static/img-planet/circle9.png'  },
-		{ radius: 192, scoreValue: 66, img: '/static/img-planet/circle10.png' },
-	],	
-	currentFruitSize: 0,
-	nextFruitSize: 0,	
-	setNextFruitSize: function () {
-		Game.nextFruitSize = Math.floor(rand() * 5);
-		Game.elements.nextFruitImg.src = `/static/img-planet/circle${Game.nextFruitSize}.png`;
-	},
+        score: 0,
+        fruitsMerged: [],
+        calculateScore: function () {
+            const score = Game.fruitsMerged.reduce((total, count, sizeIndex) => {
+                const value = Game.fruitSizes[sizeIndex].scoreValue * count;
+                return total + value;
+            }, 0);
 
-	showHighscore: function () {
-		Game.elements.statusValue.innerText = Game.cache.highscore;
-	},
-	loadHighscore: function () {
-		const gameCache = localStorage.getItem('suika-game-cache');
-		if (gameCache === null) {
-			Game.saveHighscore();
-			return;
-		}
+            Game.score = score;
+            Game.elements.score.innerText = Game.score;
+        },
 
-		Game.cache = JSON.parse(gameCache);
-		Game.showHighscore();
-	},
-	saveHighscore: function () {
-		Game.calculateScore();
-		if (Game.score < Game.cache.highscore) return;
+        fruitSizes: [
+            { radius: 24,  scoreValue: 1,  img: '/static/img-planet/circle0.png'  },
+            { radius: 32,  scoreValue: 3,  img: '/static/img-planet/circle1.png'  },
+            { radius: 40,  scoreValue: 6,  img: '/static/img-planet/circle2.png'  },
+            { radius: 56,  scoreValue: 10, img: '/static/img-planet/circle3.png'  },
+            { radius: 64,  scoreValue: 15, img: '/static/img-planet/circle4.png'  },
+            { radius: 72,  scoreValue: 21, img: '/static/img-planet/circle5.png'  },
+            { radius: 84,  scoreValue: 28, img: '/static/img-planet/circle6.png'  },
+            { radius: 96,  scoreValue: 36, img: '/static/img-planet/circle7.png'  },
+            { radius: 128, scoreValue: 45, img: '/static/img-planet/circle8.png'  },
+            { radius: 160, scoreValue: 55, img: '/static/img-planet/circle9.png'  },
+            { radius: 192, scoreValue: 66, img: '/static/img-planet/circle10.png' },
+        ],	
+        currentFruitSize: 0,
+        nextFruitSize: 0,	
+        setNextFruitSize: function () {
+            Game.nextFruitSize = Math.floor(rand() * 5);
+            Game.elements.nextFruitImg.src = `/static/img-planet/circle${Game.nextFruitSize}.png`;
+        },
 
-		Game.cache.highscore = Game.score;
-		Game.showHighscore();
-		// Game.elements.endTitle.innerText = 'New Highscore!';제거후보
+        showHighscore: function () {
+            Game.elements.statusValue.innerText = Game.cache.highscore;
+        },
+        loadHighscore: function () {
+            const gameCache = localStorage.getItem('suika-game-cache');
+            if (gameCache === null) {
+                Game.saveHighscore();
+                return;
+            }
 
-		localStorage.setItem('suika-game-cache', JSON.stringify(Game.cache));
-	},
+            Game.cache = JSON.parse(gameCache);
+            Game.showHighscore();
+        },
+        saveHighscore: function () {
+            Game.calculateScore();
+            if (Game.score < Game.cache.highscore) return;
 
-	initGame: function () {
-		Render.run(render);
-		Runner.run(runner, engine);
+            Game.cache.highscore = Game.score;
+            Game.showHighscore();
 
-		Composite.add(engine.world, menuStatics);
+            localStorage.setItem('suika-game-cache', JSON.stringify(Game.cache));
+        },
 
-		Game.loadHighscore();
-		Game.elements.ui.style.display = 'none';
-		Game.fruitsMerged = Array.apply(null, Array(Game.fruitSizes.length)).map(() => 0);
+        initGame: function () {
+            Render.run(render);
+            Runner.run(runner, engine);
 
-		const menuMouseDown = function () {
-			if (mouseConstraint.body === null || mouseConstraint.body?.label !== 'btn-start') {
-				return;
-			}
+            Composite.add(engine.world, menuStatics);
 
-			Events.off(mouseConstraint, 'mousedown', menuMouseDown);
-			Game.startGame();
-		}
+            Game.loadHighscore();
+            Game.elements.ui.style.display = 'none';
+            Game.fruitsMerged = Array.apply(null, Array(Game.fruitSizes.length)).map(() => 0);
 
-		Events.on(mouseConstraint, 'mousedown', menuMouseDown);
-	},
+            const menuMouseDown = function () {
+                if (mouseConstraint.body === null || mouseConstraint.body?.label !== 'btn-start') {
+                    return;
+                }
+
+                Events.off(mouseConstraint, 'mousedown', menuMouseDown);
+                Game.startGame();
+            }
+
+            Events.on(mouseConstraint, 'mousedown', menuMouseDown);
+        },
 
 	startGame: function () {
 		Game.sounds.click.play();
