@@ -1,0 +1,17 @@
+[2024-09-10 07:35:54 +0000] [12747] [INFO] Starting gunicorn 23.0.0
+[2024-09-10 07:35:54 +0000] [12747] [INFO] Listening at: http://127.0.0.1:8000 (12747)
+[2024-09-10 07:35:54 +0000] [12747] [INFO] Using worker: sync
+[2024-09-10 07:35:54 +0000] [12749] [INFO] Booting worker with pid: 12749
+[2024-09-10 07:35:54 +0000] [12750] [INFO] Booting worker with pid: 12750
+[2024-09-10 07:35:55 +0000] [12751] [INFO] Booting worker with pid: 12751
+[2024-09-10 08:25:54 +0000] [12747] [INFO] Handling signal: term
+[2024-09-10 08:25:54 +0000] [12749] [INFO] Worker exiting (pid: 12749)
+Template folder: /home/ec2-user/planet-game/backend/app/../../frontend
+[2024-09-10 08:25:54 +0000] [12750] [INFO] Worker exiting (pid: 12750)
+Template folder: /home/ec2-user/planet-game/backend/app/../../frontend
+[2024-09-10 08:25:54 +0000] [12751] [INFO] Worker exiting (pid: 12751)
+Template folder: /home/ec2-user/planet-game/backend/app/../../frontend
+[2024-09-10 08:25:54 +0000] [12747] [ERROR] Worker (pid:12750) was sent SIGTERM!
+[2024-09-10 08:25:54 +0000] [12747] [ERROR] Worker (pid:12751) was sent SIGTERM!
+[2024-09-10 08:25:54 +0000] [12747] [ERROR] Worker (pid:12749) was sent SIGTERM!
+[2024-09-10 08:25:54 +0000] [12747] [INFO] Shutting down: Master
