@@ -46,7 +46,7 @@ def test_index_js():
 def login_page():
     return render_template('login.html')
 
-######################################### 테스트좀 해보자
+######################################### 테스트좀 해보자1
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
