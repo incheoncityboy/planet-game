@@ -13,30 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH
-      run: |
-        eval $(ssh-agent -s)
-        echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' | ssh-add -
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
-        touch ~/.ssh/known_hosts
-        ssh-keyscan -H 13.55.83.39 >> ~/.ssh/known_hosts
-
-    - name: Deploy to EC2name: Deploy to EC2
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Set up SSH with Base64 Key
       run: |
         eval $(ssh-agent -s)
@@ -53,13 +29,6 @@ jobs:
         ssh -o StrictHostKeyChecking=no -vvv ec2-user@13.55.83.39 "echo 'SSH connection successful'"
 
     - name: Deploy to EC2
-      run: |
-        ssh ec2-user@13.55.83.39 << 'EOF'
-          cd /home/ec2-user/planet-game
-          git pull origin main
-          sudo systemctl restart my_flask_app.service
-        EOF
-
       run: |
         ssh ec2-user@13.55.83.39 << 'EOF'
           cd /home/ec2-user/planet-game
