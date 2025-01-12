@@ -16,11 +16,11 @@ jobs:
     - name: Set up SSH with Base64 Key
       run: |
         eval $(ssh-agent -s)
+        mkdir -p ~/.ssh  # Ensure the .ssh directory exists
+        chmod 700 ~/.ssh
         echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" | base64 -d > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-add ~/.ssh/id_ed25519
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
         ssh-keyscan -H 13.55.83.39 >> ~/.ssh/known_hosts
         cat ~/.ssh/known_hosts
 
