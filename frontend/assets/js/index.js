@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             localStorage.setItem('suika-game-cache', JSON.stringify(Game.cache));
         },
+		
 
         initGame: function () {
             Render.run(render);
@@ -482,7 +483,7 @@ const mouseConstraint = MouseConstraint.create(engine, {
 });
 render.mouse = mouse;
 
-Game.initGame();
+// Game.initGame();
 
 const resizeCanvas = () => {
 	const screenWidth = document.body.clientWidth;
