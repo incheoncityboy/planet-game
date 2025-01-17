@@ -493,15 +493,28 @@ const resizeCanvas = () => {
 	let newHeight = Game.height;
 	let scaleUI = 1;
 
-	if (screenWidth * 1.5 > screenHeight) {
-		newHeight = Math.min(Game.height, screenHeight);
-		newWidth = newHeight / 1.5;
-		scaleUI = newHeight / Game.height;
+	// if (screenWidth * 1.5 > screenHeight) {
+	// 	newHeight = Math.min(Game.height, screenHeight);
+	// 	newWidth = newHeight / 1.5;
+	// 	scaleUI = newHeight / Game.height;
+	// } else {
+	// 	newWidth = Math.min(Game.width, screenWidth);
+	// 	newHeight = newWidth * 1.5;
+	// 	scaleUI = newWidth / Game.width;
+	// }
+
+	if (screenWidth / screenHeight < Game.width / Game.height) {
+		// 화면이 좁은 경우, 너비를 기준으로 크기 설정
+		newWidth = screenWidth;
+		newHeight = newWidth * (Game.height / Game.width);
 	} else {
-		newWidth = Math.min(Game.width, screenWidth);
-		newHeight = newWidth * 1.5;
-		scaleUI = newWidth / Game.width;
+		// 화면이 넓은 경우, 높이를 기준으로 크기 설정
+		newHeight = screenHeight;
+		newWidth = newHeight * (Game.width / Game.height);
 	}
+	
+	scaleUI = newWidth / Game.width;
+	
 
 	render.canvas.style.width = `${newWidth}px`;
 	render.canvas.style.height = `${newHeight}px`;
