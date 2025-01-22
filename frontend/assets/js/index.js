@@ -440,10 +440,10 @@ const render = Render.create({
 // #C7AEDA 보라색 배경
 
 const menuStatics = [
-    Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
-        isStatic: true,
-        render: { sprite: { texture: '/static/img/planet-src.png' } },
-    }),
+    // Bodies.rectangle(Game.width / 2, Game.height * 0.4, 512, 512, {
+    //     isStatic: true,
+    //     render: { sprite: { texture: '/static/img/planet-src.png' } },
+    // }),
 
     // Start button
     Bodies.rectangle(Game.width / 2, Game.height * 0.75, 512, 96, {
